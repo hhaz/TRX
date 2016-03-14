@@ -1,6 +1,5 @@
 extend layout2
-block titleContent
- h1=title
+h1=title
 
 block facets
   h2 Facets
@@ -50,27 +49,24 @@ block Transactions
   th Level 2
   th Level 3
   tr(style="vertical-align: top;")
-    - for trx in transactions
-     - if (trx)
-        script
-         document.write("<td>#{trx.Date_Ticket}</td>");
-         document.write("<td>#{trx.Date_Serveur}</td>");
-         document.write("<td>#{trx.Montant}</td>");
-         document.write("<td>#{trx.Type_d_application}</td>");
-         document.write("<td>#{trx.Type_de_transaction}</td>");
-         document.write("<td>#{trx.Monnaie}</td>");
-         document.write("<td>#{trx.Level_1}</td>");
-         document.write("<td>#{trx.Level_2}</td>");
-         document.write("<td>#{trx.Level_3}</td>");
-         document.write("<tr/>");
+    each trx in transactions
+     td #{trx.Date_Ticket}
+     td #{trx.Date_Serveur}
+     td #{trx.Date_Ticket}
+     td #{trx.Date_Serveur}
+     td #{trx.Montant}
+     td #{trx.Type_d_application}
+     td #{trx.Type_de_transaction}
+     td #{trx.Monnaie}
+     td #{trx.Level_1}
+     td #{trx.Level_2}
+     td #{trx.Level_3}
+     tr
 
  form(method="post",action="/go/0") 
-  script
-    var nextPage = #{pageId} + 1;
-    var previousPage = #{pageId} - 1;
-     document.write("<input type='hidden' name='montantMin' id='montantMin' value=" + #{montantMin} +">")
-     document.write("<input type='hidden' name='montantMax' id='montantMax' value=" + #{montantMax} +">")
-     document.write("<input type='submit' value='Previous Page' formaction='/go/" + previousPage + "''>") ;
-     document.write("<input type='submit' value='Next Page' formaction='/go/" + nextPage + "''>") ;
+  input(type="hidden", name="montantMin", id="montantMin",value="#{montantMin}")
+  input(type="hidden",name="montantMax",id="montantMax",value="#{montantMax}")
+  input(type="submit",value="Previous Page",formaction="/go/#{pagePrev}")
+  input(type="submit",value="Next Page",formaction="/go/#{pageNext}")
 
    
