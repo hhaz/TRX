@@ -22,7 +22,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
 }
 
 Transactions.prototype.export = function (montantMin, montantMax, totalRecords, callback) {
-  var query = 'q=*&fq=Montant:[' + montantMin + '%20TO%20' + montantMax + ']&rows=' + totalRecords + "'";
+  var query = "q=*&fq=Montant:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + totalRecords;
   var zip = new ZipWriter();
   client.get('trx/select', query, function(err, obj){
     if(err){
@@ -33,7 +33,6 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
       {
         data += obj.response.docs[trx].Date_Ticket + "," + obj.response.docs[trx].Date_Serveur + "," + obj.response.docs[trx].Monnaie + "\r\n";
       }
-      console.log( "data " + data);
       zip.addData("results.txt", data);
       zip.toBuffer(function(buf) {
        callback(buf);
