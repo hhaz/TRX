@@ -1,8 +1,5 @@
 var ZipWriter = require("moxie-zip").ZipWriter;
 
-var nodeZip = new require('node-zip')();
-
-
 var solr = require('solr-client');
 var client = solr.createClient();
 
@@ -21,25 +18,43 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
 });
 }
 
-Transactions.prototype.export = function (montantMin, montantMax, totalRecords, callback) {
-  var query = "q=*&fq=Montant:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + totalRecords;
-  var zip = new ZipWriter();
-  client.get('trx/select', query, function(err, obj){
+Transactions.prototype.export = function (montantMin, montantMax, totalRecords, zip, callback) {
+  var query = "";
+  var rowsPerIteration = 10000;
+  var rowsToRetrieve = 0;
+  var data = "";
+  var last = false;
+
+  for( var i = 0; i <= totalRecords; i += rowsPerIteration) {
+    console.log(i);
+    if (totalRecords - i < rowsPerIteration) {
+      rowsToRetrieve = totalRecords - i;
+      last = true;
+    }
+    else
+    {
+      rowsToRetrieve = rowsPerIteration;
+    }
+    
+    query = "q=*&fq=Montant:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
+    
+    client.get('trx/select', query, function(err, obj) {
     if(err){
       console.log(err);
     } else {
-      var data = "";
-      for(var trx in obj.response.docs)
-      {
-        data += obj.response.docs[trx].Date_Ticket + "," + obj.response.docs[trx].Date_Serveur + "," + obj.response.docs[trx].Monnaie + "\r\n";
-      }
-      zip.addData("results.txt", data);
+    for(var trx in obj.response.docs)
+    {
+      data += obj.response.docs[trx].Date_Ticket + "," + obj.response.docs[trx].Date_Serveur + "," + obj.response.docs[trx].Monnaie + "\r\n";
+    }
+      zip.addData("results.txt", data); 
+    }
+    if(last) {
       zip.toBuffer(function(buf) {
-       callback(buf);
-    });
+        callback(buf);
+      });
+    }
+  });
  }
-});
-}  
+}
 
 exports.Transactions = Transactions;
-
