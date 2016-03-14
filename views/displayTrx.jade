@@ -16,28 +16,26 @@ block facets
   
 
 block stats
-  h2 Stats 
-  p
-   table(id="t01")
-    th Currency
-    th Trx Type
-    th App
-    th Count
-    th Amount
-    each pivot,index in pivots
-     each spivot,sindex in pivot 
-      each sspivot,ssindex in spivot.pivot 
-        each ssspivot in sspivot.pivot
-          tr(style="vertical-align: top;")
-            td #{spivot.value}
-            td #{sspivot.value}
-            td #{ssspivot.value}
-            td #{ssspivot.count}
-            td #{ssspivot.stats.stats_fields.Montant.sum} 
+ h2 Stats 
+ table(id="t01")
+  th Currency
+  th Trx Type
+  th App
+  th Count
+  th Amount
+  each pivot,index in pivots
+   each spivot,sindex in pivot 
+    each sspivot,ssindex in spivot.pivot 
+      each ssspivot in sspivot.pivot
+        tr(style="vertical-align: top;")
+          td #{spivot.value}
+          td #{sspivot.value}
+          td #{ssspivot.value}
+          td #{ssspivot.count}
+          td #{ssspivot.stats.stats_fields.Montant.sum} 
 
 block Transactions
  h2 Transactions
- p
  table(id="t01")
   th Date Ticket
   th Date Serveur

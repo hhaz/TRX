@@ -1,7 +1,6 @@
 var express = require('express');
 var connect = require('connect');
 var stylus = require('stylus');
-var ZipWriter = require("moxie-zip").ZipWriter;
 
 var Transactions = require('./getTrx').Transactions;
 
@@ -61,13 +60,11 @@ app.post('/go/:pageId', function(req, res){
 });
 
 app.post('/go/file/export', function(req, res) {
-var zip = new ZipWriter();
-transactions.export( req.param('montantMin'), req.param('montantMax'), req.param('totalRecords'), zip, function (data) {
+transactions.export( req.param('montantMin'), req.param('montantMax'), req.param('totalRecords'), function (data) {
         res.set({'Content-Type' :'application/octet-stream', 
           'Content-length' : data.length , 
           'Content-disposition' :'attachment; filename=export.zip'});
         res.send(data);
-        res.on( 'data' , function(data) { console.log ('yo')});
       });
  });
 

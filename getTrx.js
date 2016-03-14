@@ -1,7 +1,7 @@
 var ZipWriter = require("moxie-zip").ZipWriter;
-
 var solr = require('solr-client');
 var client = solr.createClient();
+var async = require("async");
 
 Transactions = function() {
 };
@@ -18,15 +18,23 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
 });
 }
 
-Transactions.prototype.export = function (montantMin, montantMax, totalRecords, zip, callback) {
+Transactions.prototype.export = function (montantMin, montantMax, totalRecords, callback) {
   var query = "";
   var rowsPerIteration = 10000;
   var rowsToRetrieve = 0;
   var data = "";
   var last = false;
+  var nbLoops = 0;
+  var inserted =0;
+  var zip = new ZipWriter();
+
+for( var i = 0; i <= totalRecords; i += rowsPerIteration) {
+    if (totalRecords - i >= rowsPerIteration) {
+      nbLoops ++;
+    }
+  }
 
   for( var i = 0; i <= totalRecords; i += rowsPerIteration) {
-    console.log(i);
     if (totalRecords - i < rowsPerIteration) {
       rowsToRetrieve = totalRecords - i;
       last = true;
@@ -37,24 +45,25 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
     }
     
     query = "q=*&fq=Montant:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
-    
+
     client.get('trx/select', query, function(err, obj) {
-    if(err){
-      console.log(err);
-    } else {
-    for(var trx in obj.response.docs)
-    {
-      data += obj.response.docs[trx].Date_Ticket + "," + obj.response.docs[trx].Date_Serveur + "," + obj.response.docs[trx].Monnaie + "\r\n";
-    }
-      zip.addData("results.txt", data); 
-    }
-    if(last) {
-      zip.toBuffer(function(buf) {
+      if(err){
+        console.log(err);
+      } else {
+        for(var trx in obj.response.docs)
+        {
+          data += obj.response.docs[trx].Date_Ticket + "," + obj.response.docs[trx].Date_Serveur + "," + obj.response.docs[trx].Monnaie + "\r\n";
+        }
+      }
+      zip.addData("export.txt", data);  
+      if(++inserted == nbLoops) {
+        zip.toBuffer(function(buf) {
         callback(buf);
       });
-    }
-  });
- }
+      }
+     }
+    );
+  }
 }
 
 exports.Transactions = Transactions;
