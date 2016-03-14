@@ -50,6 +50,8 @@ app.post('/go/:pageId', function(req, res){
             facets:facetList,
             pivots:facetPivot,
             pageId:req.params.pageId,
+            pageNext : parseInt(req.params.pageId) + 1,
+            pagePrev : parseInt(req.params.pageId) - 1,
             montantMin:req.param('montantMin'),
             montantMax:req.param('montantMax'),
             totalRecords:total
