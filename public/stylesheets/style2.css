@@ -1,0 +1,152 @@
+/*
+ * Grab a custom font from Google
+ */
+@import url("http://fonts.googleapis.com/css?family=Quicksand");
+/*
+ * Store the main color and
+ * background color as variables
+ */
+h1 {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  padding: 3px 7px 2px 7px;
+}
+h2 {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  padding: 3px 7px 2px 7px;
+}
+li {
+  border: 0;
+  margin: 0;
+  padding: 0px 0px 0px 10px;
+}
+ul {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+table {
+  width: 100%;
+  overflow-y: auto;
+}
+table,
+th,
+td {
+  border: 1px solid #000;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 5px;
+  text-align: left;
+}
+table#t01 tr:nth-child(even) {
+  background-color: #eee;
+}
+table#t01 tr:nth-child(odd) {
+  background-color: #fff;
+}
+table#t01 th {
+  background-color: #000;
+  color: #fff;
+}
+textarea {
+  border: 1px solid #999;
+  width: 95%;
+  margin: 5px 0;
+  padding: 3px;
+}
+body {
+  font-family: 'Georgia';
+  background-color: #f2f2f2;
+  color: #444;
+}
+header {
+  font-family: 'Quicksand';
+  padding: 5px 5px;
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+/*
+   * Note the use of the `main-color`
+   * variable and the `darken` function
+   */
+  background-color: #a7c942;
+  border-bottom: 1px solid #77912a;
+  text-shadow: 0px -1px 0px #77912a;
+}
+.created_at {
+  font-size: 12px;
+}
+.contentTitle {
+  margin: -10px 10px 10px 10px;
+  color: #a7c942;
+}
+.leftContainer {
+  width: 240px;
+  height: 800px;
+  font-size: 12px;
+  float: left;
+  margin: 5px auto;
+  background-color: #fafafa;
+  overflow: hidden;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+.container {
+  width: 800px;
+  height: 400px;
+  font-size: 12px;
+  float: left;
+  margin: 5px 0px 0px 10px;
+  background-color: #fafafa;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
+.bottom {
+  width: 800px;
+  height: 200px;
+  font-size: 12px;
+  float: left;
+  margin: 5px 0px 0px 10px;
+  background-color: #fafafa;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
+.contentBody {
+  float: left;
+  background-color: #fff;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  width: 780px;
+  margin: -10px 10px 10px 10px;
+}
+.body {
+  float: left;
+  font-size: 15px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  padding: 3px 7px 2px 20px;
+  width: 750px;
+  background-color: #fff;
+  border-radius: 3px;
+  border: 0px solid #ccc;
+  margin: 10px 0px;
+  margin-right: 20px;
+}
+.title {
+  float: left;
+  font-size: 20px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  padding: 3px 7px 2px 7px;
+  width: 650px;
+  border-radius: 3px;
+  border: 0px solid #ccc;
+}
+footer {
+  width: 500px;
+  margin: 50px auto;
+  border-top: 1px dotted #ccc;
+  padding-top: 5px;
+  font-size: 13px;
+}

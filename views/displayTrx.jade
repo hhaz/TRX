@@ -1,0 +1,76 @@
+extend layout2
+block titleContent
+ h1=title
+
+block facets
+  h2 Facets
+  li #{totalRecords} transactions
+  - each facet in facets
+    li #{facet[0]} ( #{facet[1]} ) 
+    li #{facet[2]} ( #{facet[3]} )
+  hr
+  form(method="post")
+   input(type="submit",name="export",value="export",formaction="/go/file/export")
+   input(type="hidden",name="montantMin",id="montantMin",value="#{montantMin}")
+   input(type="hidden",name="montantMax",id="montantMax",value="#{montantMax}")
+   input(type="hidden",name="totalRecords",id="totalRecords",value="#{totalRecords}")
+  
+
+block stats
+  h2 Stats 
+  p
+   table(id="t01")
+    th Currency
+    th Trx Type
+    th App
+    th Count
+    th Amount
+    each pivot,index in pivots
+     each spivot,sindex in pivot 
+      each sspivot,ssindex in spivot.pivot 
+        each ssspivot in sspivot.pivot
+          tr(style="vertical-align: top;")
+            td #{spivot.value}
+            td #{sspivot.value}
+            td #{ssspivot.value}
+            td #{ssspivot.count}
+            td #{ssspivot.stats.stats_fields.Montant.sum} 
+
+block Transactions
+ h2 Transactions
+ p
+ table(id="t01")
+  th Date Ticket
+  th Date Serveur
+  th Montant
+  th Type Application
+  th Type de Transaction
+  th Devise
+  th Level 1
+  th Level 2
+  th Level 3
+  tr(style="vertical-align: top;")
+    - for trx in transactions
+     - if (trx)
+        script
+         document.write("<td>#{trx.Date_Ticket}</td>");
+         document.write("<td>#{trx.Date_Serveur}</td>");
+         document.write("<td>#{trx.Montant}</td>");
+         document.write("<td>#{trx.Type_d_application}</td>");
+         document.write("<td>#{trx.Type_de_transaction}</td>");
+         document.write("<td>#{trx.Monnaie}</td>");
+         document.write("<td>#{trx.Level_1}</td>");
+         document.write("<td>#{trx.Level_2}</td>");
+         document.write("<td>#{trx.Level_3}</td>");
+         document.write("<tr/>");
+
+ form(method="post",action="/go/0") 
+  script
+    var nextPage = #{pageId} + 1;
+    var previousPage = #{pageId} - 1;
+     document.write("<input type='hidden' name='montantMin' id='montantMin' value=" + #{montantMin} +">")
+     document.write("<input type='hidden' name='montantMax' id='montantMax' value=" + #{montantMax} +">")
+     document.write("<input type='submit' value='Previous Page' formaction='/go/" + previousPage + "''>") ;
+     document.write("<input type='submit' value='Next Page' formaction='/go/" + nextPage + "''>") ;
+
+   

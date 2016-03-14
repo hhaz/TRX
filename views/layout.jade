@@ -1,0 +1,29 @@
+!!!5
+html
+  head
+    title NodeJS & solR Transactions Display
+    script(type='text/javascript')
+      document.write("<link rel='stylesheet' href='/stylesheets/style2.css'/>");
+  body
+    header
+      h1 #{title}
+    .container
+      block selectParam  
+      form(method="post",action="/go/0")     
+        table(id="tableLogin")
+         td Devise
+         td 
+          div 
+           input(type="text", name="devise", id="devise")
+         tr
+         td Montant Min
+         td 
+          div
+          input(type="text", name="montantMin", id="montantMin")
+         tr
+         td Montant Max
+         td 
+          div
+           input(type="text", name="montantMax", id="montantMax")            
+         tr
+        input(type="submit", value="OK")
