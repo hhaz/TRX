@@ -13,7 +13,6 @@ block facets
    input(type="hidden",name="montantMin",id="montantMin",value="#{montantMin}")
    input(type="hidden",name="montantMax",id="montantMax",value="#{montantMax}")
    input(type="hidden",name="totalRecords",id="totalRecords",value="#{totalRecords}")
-  
 
 block stats
  h2 Stats 
@@ -65,4 +64,6 @@ block Transactions
   input(type="submit",value="Previous Page",formaction="/go/#{pagePrev}")
   input(type="submit",value="Next Page",formaction="/go/#{pageNext}")
 
+block Right
+  p
    

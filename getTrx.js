@@ -1,7 +1,6 @@
 var ZipWriter = require("moxie-zip").ZipWriter;
 var solr = require('solr-client');
 var client = solr.createClient();
-var async = require("async");
 
 Transactions = function() {
 };
@@ -18,7 +17,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
 });
 }
 
-Transactions.prototype.export = function (montantMin, montantMax, totalRecords, callback) {
+Transactions.prototype.export = function (montantMin, montantMax, totalRecords, res, callback) {
   var query = "";
   var rowsPerIteration = 10000;
   var rowsToRetrieve = 0;
@@ -28,7 +27,7 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
   var inserted =0;
   var zip = new ZipWriter();
 
-for( var i = 0; i <= totalRecords; i += rowsPerIteration) {
+  for( var i = 0; i <= totalRecords; i += rowsPerIteration) {
     if (totalRecords - i >= rowsPerIteration) {
       nbLoops ++;
     }

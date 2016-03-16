@@ -6,7 +6,8 @@ var Transactions = require('./getTrx').Transactions;
 
 var transactions = new Transactions();
 
-var app = module.exports = express();
+var app = express();
+
 var sessionTimeOut = 3600000; //1 hour
 
 var server = connect();
@@ -60,7 +61,7 @@ app.post('/go/:pageId', function(req, res){
 });
 
 app.post('/go/file/export', function(req, res) {
-transactions.export( req.param('montantMin'), req.param('montantMax'), req.param('totalRecords'), function (data) {
+transactions.export( req.param('montantMin'), req.param('montantMax'), req.param('totalRecords'), res, function (data) {
         res.set({'Content-Type' :'application/octet-stream', 
           'Content-length' : data.length , 
           'Content-disposition' :'attachment; filename=export.zip'});
