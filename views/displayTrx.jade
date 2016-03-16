@@ -45,18 +45,17 @@ block Transactions
   th Level 1
   th Level 2
   th Level 3
-  tr(style="vertical-align: top;")
     each trx in transactions
-     td #{trx.Date_Ticket}
-     td #{trx.Date_Serveur}
-     td #{trx.Montant}
-     td #{trx.Type_d_application}
-     td #{trx.Type_de_transaction}
-     td #{trx.Monnaie}
-     td #{trx.Level_1}
-     td #{trx.Level_2}
-     td #{trx.Level_3}
-     tr
+     tr(style="vertical-align: top;")
+       td #{trx.Date_Ticket}
+       td #{trx.Date_Serveur}
+       td #{trx.Montant}
+       td #{trx.Type_d_application}
+       td #{trx.Type_de_transaction}
+       td #{trx.Monnaie}
+       td #{trx.Level_1}
+       td #{trx.Level_2}
+       td #{trx.Level_3}
 
  form(method="post",action="/go/0") 
   input(type="hidden", name="montantMin", id="montantMin",value="#{montantMin}")

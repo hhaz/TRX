@@ -11,7 +11,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
     if(err){
       console.log(err);
     } else {
-      console.log(obj.response.numFound);
+      console.log(obj.response.numFound + " records found");
       callback(null, obj.response.docs, obj.facet_counts.facet_fields, obj.facet_counts.facet_pivot,obj.response.numFound);
   }
 });
