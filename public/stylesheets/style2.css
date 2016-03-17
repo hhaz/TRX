@@ -94,8 +94,8 @@ header {
   border: 1px solid #ccc;
 }
 .leftContainer {
-  width: 240px;
-  height: 700px;
+  width: 10%;
+  height: 90%;
   font-size: 12px;
   float: left;
   margin: 5px auto;
@@ -105,8 +105,8 @@ header {
   border: 1px solid #ccc;
 }
 .container {
-  width: 800px;
-  height: 400px;
+  width: 85%;
+  height: 60%;
   font-size: 12px;
   float: left;
   margin: 5px 0px 0px 10px;
@@ -116,8 +116,8 @@ header {
   overflow: auto;
 }
 .bottom {
-  width: 800px;
-  height: 300px;
+  width: 85%;
+  height: 30%;
   font-size: 12px;
   float: left;
   margin: 5px 0px 0px 10px;
@@ -155,7 +155,8 @@ header {
   border-radius: 3px;
   border: 0px solid #ccc;
 }
-footer {
+.footer {
+  float: left;
   width: 500px;
   margin: 50px auto;
   border-top: 1px dotted #ccc;

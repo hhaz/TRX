@@ -11,7 +11,6 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
     if(err){
       console.log(err);
     } else {
-      console.log(obj.response.numFound + " records found");
       callback(null, obj.response.docs, obj.facet_counts.facet_fields, obj.facet_counts.facet_pivot,obj.response.numFound);
   }
 });
@@ -54,8 +53,8 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
           data += obj.response.docs[trx].Date_Ticket + "," + obj.response.docs[trx].Date_Serveur + "," + obj.response.docs[trx].Monnaie + "\r\n";
         }
       }
-      zip.addData("export.txt", data);  
-      if(++inserted == nbLoops) {
+      if(++inserted == nbLoops +1) {
+        zip.addData("export.txt", data);  
         zip.toBuffer(function(buf) {
         callback(buf);
       });
