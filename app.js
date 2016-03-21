@@ -60,6 +60,25 @@ app.post('/go/:pageId', function(req, res){
       });
 });
 
+app.get('/api/getTrx', function(req, res){ // http://localhost:3000/api/getTrx?page=1&montantMin=1&montantMax=3
+  page       = req.query["page"];
+  montantMin = req.query["montantMin"];
+  montantMax = req.query["montantMax"];
+  console.log("Call to /api/getTrx");
+    transactions.getTransactionsOnly(page,montantMin, montantMax, function(error,docs,total){
+      res.send({totalRows : total, docs});
+      });
+});
+
+app.get('/api/getStats', function(req, res){ // http://localhost:3000/api/go?page=1&montantMin=1&montantMax=3
+  page       = req.query["page"];
+  montantMin = req.query["montantMin"];
+  montantMax = req.query["montantMax"];
+    transactions.getTransactions(page,montantMin, montantMax, function(error,docs,facetList,facetPivot,total){
+      res.send(facetPivot);
+      });
+});
+
 app.post('/go/file/export', function(req, res) {
 transactions.export( req.param('montantMin'), req.param('montantMax'), req.param('totalRecords'), res, function (data) {
         res.set({'Content-Type' :'application/octet-stream', 
@@ -70,3 +89,4 @@ transactions.export( req.param('montantMin'), req.param('montantMax'), req.param
  });
 
 app.listen(3000);
+console.log("Started !")
