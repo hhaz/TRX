@@ -45,7 +45,13 @@ app.get('/', function(req, res){
 });
 
 app.post('/go/:pageId', function(req, res){
-    transactions.getTransactions(req.params.pageId,req.param('montantMin'), req.param('montantMax'), function(error,docs,facetList,facetPivot,total){
+    transactions.getTransactions(req.params.pageId,req.param('montantMin'), req.param('montantMax'), req.param('dateMin'), req.param('dateMax'),function(error,docs,facetList,facetPivot,total){
+    
+if(error) {
+  res.render('error' );
+}
+else
+{
     var pageNext = parseInt(req.params.pageId) + 1;
     var pagePrev;
 
@@ -65,9 +71,12 @@ app.post('/go/:pageId', function(req, res){
             pagePrev : pagePrev,
             montantMin:req.param('montantMin'),
             montantMax:req.param('montantMax'),
+            dateMax : req.param('dateMax'),
+            dateMin : req.param('dateMin'),
             totalRecords:total,
             config : config
           });
+      }
       });
 });
 
@@ -75,8 +84,10 @@ app.get('/api/getTrx', function(req, res){ // http://localhost:3000/api/getTrx?p
   page       = req.query["page"];
   montantMin = req.query["montantMin"];
   montantMax = req.query["montantMax"];
+  dateMax = req.query["dateMax"];
+  dateMin = req.query["dateMin"];
   console.log("Call to /api/getTrx");
-    transactions.getTransactionsOnly(page,montantMin, montantMax, function(error,docs,total){
+    transactions.getTransactionsOnly(page,montantMin, montantMax, dateMin, dateMax, function(error,docs,total){
       res.send({totalRows : total, docs});
       });
 });
@@ -85,18 +96,25 @@ app.get('/api/getStats', function(req, res){ // http://localhost:3000/api/getSta
   page       = req.query["page"];
   montantMin = req.query["montantMin"];
   montantMax = req.query["montantMax"];
-    transactions.getTransactions(page,montantMin, montantMax, function(error,docs,facetList,facetPivot,total){
+  dateMax = req.query["dateMax"];
+  dateMin = req.query["dateMin"];
+      transactions.getTransactions(page,montantMin, montantMax, dateMin, dateMax, function(error,docs,facetList,facetPivot,total){
       res.send(facetPivot);
       });
 });
 
 app.post('/go/file/export', function(req, res) {
-transactions.export( req.param('montantMin'), req.param('montantMax'), req.param('totalRecords'), res, function (data) {
+transactions.export( req.param('montantMin'), req.param('montantMax'),  req.param('dateMin'), req.param('dateMax'), req.param('totalRecords'), res, function (error,data) {
+        if(error) {
+          res.render('error');
+        }
+        else {
         res.set({'Content-Type' :'application/octet-stream', 
           'Content-length' : data.length , 
           'Content-disposition' :'attachment; filename=export.zip'});
         res.send(data);
-      });
+      }
+    });
  });
 
 app.listen(3000);

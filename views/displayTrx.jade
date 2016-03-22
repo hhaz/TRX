@@ -12,6 +12,8 @@ block facets
    input(type="submit",name="export",value="export",formaction="/go/file/export")
    input(type="hidden",name="montantMin",id="montantMin",value="#{montantMin}")
    input(type="hidden",name="montantMax",id="montantMax",value="#{montantMax}")
+   input(type="hidden", name="dateMin", id="dateMin",value="#{dateMin}")
+   input(type="hidden", name="dateMax", id="dateMax",value="#{dateMax}")
    input(type="hidden",name="totalRecords",id="totalRecords",value="#{totalRecords}")
 
 block stats
@@ -60,6 +62,8 @@ block Transactions
  form(method="post",action="/go/0") 
   input(type="hidden", name="montantMin", id="montantMin",value="#{montantMin}")
   input(type="hidden",name="montantMax",id="montantMax",value="#{montantMax}")
+  input(type="hidden", name="dateMin", id="dateMin",value="#{dateMin}")
+  input(type="hidden", name="dateMax", id="dateMax",value="#{dateMax}")
   input(type="submit",value="Previous Page",formaction="/go/#{pagePrev}")
   input(type="submit",value="Next Page",formaction="/go/#{pageNext}")
     
