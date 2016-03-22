@@ -7,7 +7,7 @@ Transactions = function() {
 };
 
 Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantMax, callback) {
-  var query = 'q=*&fq=Montant:[' + montantMin + '%20TO%20' + montantMax + ']&rows=30&start=' + page*50;
+  var query = 'q=*&fq=' + config.amount +':[' + montantMin + '%20TO%20' + montantMax + ']&rows=30&start=' + page*50;
   client.get( config.solRcore + '/select', query, function(err, obj){
     if(err){
       console.log(err);
@@ -18,7 +18,7 @@ Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantM
 }
 
 Transactions.prototype.getTransactions = function (page,montantMin, montantMax, callback) {
-  var query = 'q=*&fq=Amount:[' + montantMin + '%20TO%20' + montantMax + ']&facet=true&facet.field=Amount&facet.field=AppType&facet.pivot={!stats=piv1}Currency,TrxType,AppType&stats=true&stats.field={!tag=piv1%20sum=true}Amount&rows=30&start=' + page*50;
+  var query = 'q=*&fq=' + config.amount +':[' + montantMin + '%20TO%20' + montantMax + ']&facet=true&facet.field=' + config.amount + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true}' + config.amount + '&rows=30&start=' + page*50;
   client.get(config.solRcore + '/select', query, function(err, obj){
     if(err){
       console.log(err);
@@ -54,7 +54,7 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
       rowsToRetrieve = rowsPerIteration;
     }
     
-    query = "q=*&fq=Amount:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
+    query = "q=*&fq=" + config.amount + ":[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
 
     client.get(config.solRcore + '/select', query, function(err, obj) {
       if(err){
@@ -62,10 +62,10 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
       } else {
         for(var trx in obj.response.docs)
         {
-          data += obj.response.docs[trx].DateTicket + "," + obj.response.docs[trx].DateServer + "," + obj.response.docs[trx].Currency + "\r\n";
+          data += obj.response.docs[trx][config.dateTicket] + "," + obj.response.docs[trx][config.dateServer] + "," + obj.response.docs[trx][config.currency] + "," + obj.response.docs[trx][config.amount] + "\r\n";
         }
       }
-      if(++inserted == nbLoops +1) {
+      if(++inserted == nbLoops +1) {  
         zip.addData("export.txt", data);  
         zip.toBuffer(function(buf) {
         callback(buf);

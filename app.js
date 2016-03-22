@@ -70,7 +70,7 @@ app.post('/go/:pageId', function(req, res){
       });
 });
 
-app.get('/api/getTrx', function(req, res){ // http://localhost:3000/api/getTrx?page=1&montantMin=1&montantMax=3
+app.get('/api/getTrx', function(req, res){ // http://localhost:3000/api/getTrx?page=0&montantMin=1&montantMax=3
   page       = req.query["page"];
   montantMin = req.query["montantMin"];
   montantMax = req.query["montantMax"];
@@ -80,7 +80,7 @@ app.get('/api/getTrx', function(req, res){ // http://localhost:3000/api/getTrx?p
       });
 });
 
-app.get('/api/getStats', function(req, res){ // http://localhost:3000/api/go?page=1&montantMin=1&montantMax=3
+app.get('/api/getStats', function(req, res){ // http://localhost:3000/api/getStats?page=0&montantMin=1&montantMax=3
   page       = req.query["page"];
   montantMin = req.query["montantMin"];
   montantMax = req.query["montantMax"];
