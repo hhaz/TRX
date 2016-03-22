@@ -65,7 +65,8 @@ app.post('/go/:pageId', function(req, res){
             pagePrev : pagePrev,
             montantMin:req.param('montantMin'),
             montantMax:req.param('montantMax'),
-            totalRecords:total
+            totalRecords:total,
+            config : config
           });
       });
 });

@@ -18,7 +18,7 @@ Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantM
 }
 
 Transactions.prototype.getTransactions = function (page,montantMin, montantMax, callback) {
-  var query = 'q=*&fq=' + config.amount +':[' + montantMin + '%20TO%20' + montantMax + ']&facet=true&facet.field=' + config.amount + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true}' + config.amount + '&rows=30&start=' + page*50;
+  var query = 'q=*&fq=' + config.amount +':[' + montantMin + '%20TO%20' + montantMax + ']&facet=true&facet.field=' + config.currency + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true}' + config.amount + '&rows=30&start=' + page*50;
   client.get(config.solRcore + '/select', query, function(err, obj){
     if(err){
       console.log(err);
