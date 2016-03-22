@@ -1,5 +1,6 @@
 var ZipWriter = require("moxie-zip").ZipWriter;
 var solr = require('solr-client');
+var config = require('./config');
 var client = solr.createClient();
 
 Transactions = function() {
@@ -7,7 +8,7 @@ Transactions = function() {
 
 Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantMax, callback) {
   var query = 'q=*&fq=Montant:[' + montantMin + '%20TO%20' + montantMax + ']&rows=30&start=' + page*50;
-  client.get('trx2/select', query, function(err, obj){
+  client.get( config.solRcore + '/select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
@@ -18,7 +19,7 @@ Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantM
 
 Transactions.prototype.getTransactions = function (page,montantMin, montantMax, callback) {
   var query = 'q=*&fq=Amount:[' + montantMin + '%20TO%20' + montantMax + ']&facet=true&facet.field=Amount&facet.field=AppType&facet.pivot={!stats=piv1}Currency,TrxType,AppType&stats=true&stats.field={!tag=piv1%20sum=true}Amount&rows=30&start=' + page*50;
-  client.get('trx2/select', query, function(err, obj){
+  client.get(config.solRcore + '/select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
@@ -55,7 +56,7 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
     
     query = "q=*&fq=Amount:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
 
-    client.get('trx2/select', query, function(err, obj) {
+    client.get(config.solRcore + '/select', query, function(err, obj) {
       if(err){
         console.log(err);
       } else {

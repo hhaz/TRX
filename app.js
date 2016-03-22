@@ -1,6 +1,7 @@
 var express = require('express');
 var connect = require('connect');
 var stylus = require('stylus');
+var config = require('./config');
 
 var Transactions = require('./getTrx').Transactions;
 
@@ -98,4 +99,4 @@ transactions.export( req.param('montantMin'), req.param('montantMax'), req.param
  });
 
 app.listen(3000);
-console.log("Started !")
+console.log("Started ! Using Core : " + config.solRcore);
