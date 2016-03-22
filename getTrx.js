@@ -53,7 +53,7 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
       rowsToRetrieve = rowsPerIteration;
     }
     
-    query = "q=*&fq=Montant:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
+    query = "q=*&fq=Amount:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
 
     client.get('trx2/select', query, function(err, obj) {
       if(err){
@@ -61,7 +61,7 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
       } else {
         for(var trx in obj.response.docs)
         {
-          data += obj.response.docs[trx].Date_Ticket + "," + obj.response.docs[trx].Date_Serveur + "," + obj.response.docs[trx].Monnaie + "\r\n";
+          data += obj.response.docs[trx].DateTicket + "," + obj.response.docs[trx].DateServer + "," + obj.response.docs[trx].Currency + "\r\n";
         }
       }
       if(++inserted == nbLoops +1) {
