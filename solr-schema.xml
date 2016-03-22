@@ -1,0 +1,9 @@
+  <field name="Amount" type="double" indexed="true" stored="true"/>
+  <field name="AppType" type="string" indexed="true" stored="true"/>
+  <field name="Currency" type="string" indexed="true" stored="true"/>
+  <field name="DateServer" type="date" indexed="true" stored="true"/>
+  <field name="DateTicket" type="date" indexed="true" stored="true"/>
+  <field name="Level1" type="string" indexed="true" stored="true"/>
+  <field name="Level2" type="string" indexed="true" stored="true"/>
+  <field name="Level3" type="string" indexed="true" stored="true"/>
+  <field name="TrxType" type="string" indexed="true" stored="true"/>

@@ -31,7 +31,7 @@ block stats
           td #{sspivot.value}
           td #{ssspivot.value}
           td #{ssspivot.count}
-          td #{ssspivot.stats.stats_fields.Montant.sum} 
+          td #{ssspivot.stats.stats_fields.Amount.sum} 
 
 block Transactions
  h2 Transactions
@@ -47,15 +47,15 @@ block Transactions
   th Level 3
     each trx in transactions
      tr(style="vertical-align: top;")
-       td #{trx.Date_Ticket}
-       td #{trx.Date_Serveur}
-       td #{trx.Montant}
-       td #{trx.Type_d_application}
-       td #{trx.Type_de_transaction}
-       td #{trx.Monnaie}
-       td #{trx.Level_1}
-       td #{trx.Level_2}
-       td #{trx.Level_3}
+       td #{trx.DateTicket}
+       td #{trx.DateServer}
+       td #{trx.Amount}
+       td #{trx.AppType}
+       td #{trx.TrxType}
+       td #{trx.Currency}
+       td #{trx.Level1}
+       td #{trx.Level2}
+       td #{trx.Level3}
 
  form(method="post",action="/go/0") 
   input(type="hidden", name="montantMin", id="montantMin",value="#{montantMin}")

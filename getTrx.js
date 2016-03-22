@@ -7,7 +7,7 @@ Transactions = function() {
 
 Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantMax, callback) {
   var query = 'q=*&fq=Montant:[' + montantMin + '%20TO%20' + montantMax + ']&rows=30&start=' + page*50;
-  client.get('trx/select', query, function(err, obj){
+  client.get('trx2/select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
@@ -17,8 +17,8 @@ Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantM
 }
 
 Transactions.prototype.getTransactions = function (page,montantMin, montantMax, callback) {
-  var query = 'q=*&fq=Montant:[' + montantMin + '%20TO%20' + montantMax + ']&facet=true&facet.field=Monnaie&facet.field=Type_d_application&facet.pivot={!stats=piv1}Monnaie,Type_de_transaction,Type_d_application&stats=true&stats.field={!tag=piv1%20sum=true}Montant&rows=30&start=' + page*50;
-  client.get('trx/select', query, function(err, obj){
+  var query = 'q=*&fq=Amount:[' + montantMin + '%20TO%20' + montantMax + ']&facet=true&facet.field=Amount&facet.field=AppType&facet.pivot={!stats=piv1}Currency,TrxType,AppType&stats=true&stats.field={!tag=piv1%20sum=true}Amount&rows=30&start=' + page*50;
+  client.get('trx2/select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
@@ -55,7 +55,7 @@ Transactions.prototype.export = function (montantMin, montantMax, totalRecords, 
     
     query = "q=*&fq=Montant:[" + montantMin + "%20TO%20" + montantMax + "]&rows=" + rowsToRetrieve + "&start=" + i;
 
-    client.get('trx/select', query, function(err, obj) {
+    client.get('trx2/select', query, function(err, obj) {
       if(err){
         console.log(err);
       } else {

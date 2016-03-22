@@ -45,14 +45,23 @@ app.get('/', function(req, res){
 
 app.post('/go/:pageId', function(req, res){
     transactions.getTransactions(req.params.pageId,req.param('montantMin'), req.param('montantMax'), function(error,docs,facetList,facetPivot,total){
+    var pageNext = parseInt(req.params.pageId) + 1;
+    var pagePrev;
+
+    if((parseInt(req.params.pageId) - 1) < 0) {
+      pagePrev = 0;
+    }
+    else {
+      pagePrev = parseInt(req.params.pageId) - 1;
+    }
         res.render('displayTrx', {
             title: 'Transaction Journal',
             transactions: docs,
             facets:facetList,
             pivots:facetPivot,
             pageId:req.params.pageId,
-            pageNext : parseInt(req.params.pageId) + 1,
-            pagePrev : parseInt(req.params.pageId) - 1,
+            pageNext : pageNext,
+            pagePrev : pagePrev,
             montantMin:req.param('montantMin'),
             montantMax:req.param('montantMax'),
             totalRecords:total
