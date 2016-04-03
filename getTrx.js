@@ -22,7 +22,7 @@ if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
   }
 
-  var query = 'q=*' + fq + '&rows=30&start=' + page*50;
+  var query = 'q=*' + fq + '&rows=30&start=' + page*30;
  
   client.get( config.solRcore + '/select', query, function(err, obj){
     if(err){
@@ -35,11 +35,15 @@ if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )
 }
 
 Transactions.prototype.getTransactions = function (page,montantMin, montantMax, dateMin, dateMax, callback) {
-  console.log("date Min", dateMin);
+  console.log("date Min : '", dateMin + "'");
+  console.log("date Max : '", dateMax + "'");
+  console.log("montant Min : '", montantMin + "'");
+  console.log("montant Max : '", montantMax + "'");
+
 
  if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )){
     console.log ("Empty or incomplete parameters");
-     callback("Empty or incomplete parameters");
+     callback("Empty or incomplete parameters");  
   }
 
  else {   
@@ -53,7 +57,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
   }
 
-  var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true}' + config.amount + '&rows=30&start=' + page*50;
+  var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.level1 + '&facet.field=' + config.level2 + '&facet.field=' + config.level3 + '&facet.field=' + config.trxType + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.level1 + ',' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true%20count=true}' + config.amount + '&rows=30&start=' + page*30;
   client.get(config.solRcore + '/select', query, function(err, obj){
     if(err){
       console.log(err);
@@ -62,6 +66,19 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
   }
 });
 }
+}
+
+Transactions.prototype.getGlobalStats = function (callback) {
+  
+  var query = 'q=*&facet=true&facet.field=' + config.currency + '&facet.field=' + config.level1 + '&facet.field=' + config.level2 + '&facet.field=' + config.level3 + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&rows=0';
+  console.log( 'Query : ' + query);
+  client.get(config.solRcore + '/select', query, function(err, obj){
+    if(err){
+      console.log(err);
+    } else {
+      callback(null, obj);
+  }
+});
 }
 
 Transactions.prototype.export = function (montantMin, montantMax, dateMin, dateMax, totalRecords, res, callback) {

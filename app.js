@@ -2,6 +2,9 @@ var express = require('express');
 var connect = require('connect');
 var stylus = require('stylus');
 var config = require('./config');
+XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+document = require('jsdom').jsdom();
+d3 = require('d3');
 
 var Transactions = require('./getTrx').Transactions;
 
@@ -100,6 +103,21 @@ app.get('/api/getStats', function(req, res){ // http://localhost:3000/api/getSta
   dateMin = req.query["dateMin"];
       transactions.getTransactions(page,montantMin, montantMax, dateMin, dateMax, function(error,docs,facetList,facetPivot,total){
       res.send(facetPivot);
+      });
+});
+
+app.get('/d3test', function(req, res){ 
+  page       = req.query["page"];
+  montantMin = req.query["montantMin"];
+  montantMax = req.query["montantMax"];
+  dateMax = req.query["dateMax"];
+  dateMin = req.query["dateMin"];
+      transactions.getGlobalStats(function(error,obj){
+      res.render( 'd3test', {
+            title: 'D3JS Test' ,
+            totalRows : obj.response.numFound,
+            currencies : obj.facet_counts.facet_fields.Currency
+        })
       });
 });
 
