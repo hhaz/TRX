@@ -116,7 +116,9 @@ app.get('/d3test', function(req, res){
       res.render( 'd3test', {
             title: 'D3JS Test' ,
             totalRows : obj.response.numFound,
-            currencies : obj.facet_counts.facet_fields.Currency
+            currencies : obj.facet_counts.facet_fields.Currency,
+            TrxType : obj.facet_counts.facet_fields.TrxType,
+            AppType : obj.facet_counts.facet_fields.AppType
         })
       });
 });

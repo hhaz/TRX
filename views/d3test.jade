@@ -1,143 +1,181 @@
 head 
 	link(rel='stylesheet', href='/stylesheets/d3.css')
+	link(href="c3-0.4.10/c3.css" rel="stylesheet" type="text/css")
+	div(id="chartTrxType")
+	div(id="chartCurrency")
+	div(id="chartAppType")
+	div(id="chartTrxNbr")
 	body
 		script(src='d3.js')
+		script(src='c3-0.4.10/c3.min.js')
 		script.
 			function formatCurrencies() {
-				var jsonString = "[";
+				var trxString = '["Currencies",';
+				var xString = '["x",';
+				var loadString = "";
 				var arrayCurrencies = "#{currencies}".split(",");
 				for (i=0;i<arrayCurrencies.length;i+=2) {
-					jsonString += '{"currency": "' + arrayCurrencies[i] + '","value":' + arrayCurrencies[i+1] + "}";
+					xString += '"' + arrayCurrencies[i] + '"';
+					trxString += arrayCurrencies[i+1];
 					if(i < arrayCurrencies.length - 2) {
-						jsonString += ",";
+						trxString += ",";
+						xString += ",";
 					}
 				else {
-					jsonString += "]";
+					trxString += "]";
+					xString += "]";
 					}
 				}	
-				console.log("jsonString :",jsonString);
-				return jsonString;
+				loadString = '{"columns": [' + xString + ',' + trxString + ']}';
+				console.log("String :",loadString);
+				return loadString;
 			}
 
-			function draw2(data) {
-				var margin = {top: 20, right: 20, bottom: 30, left: 80},
-					width = 500 - margin.left - margin.right,
-					height = 200 - margin.top - margin.bottom;
-
-				var x = d3.scale.ordinal()
-					.rangeRoundBands([0, width], .1);
-
-				var y = d3.scale.linear()
-					.range([height, 0]);
-
-				var xAxis = d3.svg.axis()
-					.scale(x)
-					.orient("bottom");
-
-				var yAxis = d3.svg.axis()
-					.scale(y)
-					.orient("left")
-					.ticks(4);
-
-				var svg = d3.select("body").append("svg")
-					.attr("width", width + margin.left + margin.right)
-					.attr("height", height + margin.top + margin.bottom)
-					.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-				x.domain(data.map(function(d) { return d.currency; }));
-				y.domain([0, d3.max(data, function(d) { return d.value; })]);
-
-				svg.append("g")
-					.attr("class", "x axis")
-					.attr("transform", "translate(0," + height + ")")
-					.call(xAxis);
-
-				svg.append("g")
-					.attr("class", "y axis")
-					.call(yAxis)
-					.append("text")
-					.attr("transform", "rotate(-90)")
-					.attr("y", 3)
-					.attr("dy", ".71em")
-					.style("text-anchor", "end")
-					.text("# Transactions");
-
-				svg.selectAll(".bar")
-					.data(data)
-					.enter().append("rect")
-					.attr("class", "bar")
-					.attr("x", function(d) { return x(d.currency); })
-					.attr("width", x.rangeBand())
-					.attr("y", function(d) { return y(d.value); })
-					.attr("height", function(d) { return height - y(d.value); });
+			function formatTrxType() {
+				var trxString = '["Transaction Type",';
+				var xString = '["x",';
+				var loadString = "";
+				var arrayTrxType = "#{TrxType}".split(",");
+				for (i=0;i<arrayTrxType.length;i+=2) {
+					xString += '"' + arrayTrxType[i] + '"';
+					trxString += arrayTrxType[i+1];
+					if(i < arrayTrxType.length - 2) {
+						trxString += ",";
+						xString += ",";
+					}
+				else {
+					trxString += "]";
+					xString += "]";
+					}
+				}	
+				loadString = '{"columns": [' + xString + ',' + trxString + ']}';
+				console.log("String :",loadString);
+				return loadString;
 			}
 
-			function type(d) {
-			d.value = +d.value;
-			return d;
+			function formatAppType() {
+				var trxString = '';
+				var xString = '';
+				var loadString = "";
+				var arrayAppType = "#{AppType}".split(",");
+				for (i=0;i<arrayAppType.length;i+=2) {
+					xString += '["' + arrayAppType[i] + '",' + arrayAppType[i+1] + "]";
+					if(i < arrayAppType.length - 2) {
+						xString += ",";
+					}
+				else {
+					xString += "]";
+					}
+				}	
+				loadString = '{"columns": [' + xString + '}';
+				console.log("String :",loadString);
+				return loadString;
 			}
 
-			function draw(dataset) {
-				console.log("dataset :",dataset);
-				//Largeur et hauteur du graphe
-				var larg = 100;
-				var haut = 100;
-				var barPadding = 2; //Padding des barres
-				var nbb = dataset.length; //Nb de barres
-				var lb = ((larg - nbb) / nbb); //Largeur barre
-				var ch = (haut / d3.max(dataset, function (d) {
-													return d.value //Coef. hauteur.
-												}));
+			var chartTrxType = c3.generate({
+					bindto: '#chartTrxType',
+					data: {
+							x : 'x',
+							columns: [
+									['x'],
+									['Transactions'],
+							],
+							groups: [
+									['download']
+							],
+							type: 'bar'
+					},
+					axis: {
+							x: {
+									type: 'category' // this needed to load string x value
+							},
+							y: {
+							tick: {
+								format: d3.format(".2s,") 
+							}
+						}
+					}
+			});
+			chartTrxType.load(JSON.parse(formatTrxType()));
 
-				//Create SVG element
-				var svg = d3.select("body")
-					.append("svg")
-					.attr("width", larg)
-					.attr("height", haut);
+			var chartCurrency = c3.generate({
+					bindto: '#chartCurrency',
+					data: {
+							x : 'x',
+							columns: [
+									['x'],
+									['Currencies'],
+							],
+							groups: [
+									['download']
+							],
+							type: 'bar'
+					},
+					axis: {
+							x: {
+									type: 'category' // this needed to load string x value
+							},
+							y: {
+							tick: {
+								format: d3.format(".2s,") 
+							}
+						}
+					}
+			});
+			chartCurrency.load(JSON.parse(formatCurrencies()));
 
+			var chartAppType = c3.generate({
+					bindto: '#chartAppType',
+					data: {
+						columns: [
+							
+						],
+						type : 'donut',
+							onclick: function (d, i) { console.log("onclick", d, i); },
+							onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+							onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+						},
+						donut: {
+						title: "Applications"
+						}
+				});
+			chartAppType.load(JSON.parse(formatAppType()));
 
-				svg.selectAll("rect")
-					.data(dataset)
-					.enter()
-					.append("rect")
-					.attr("x", function(d, i) {
-						return ((i) * lb);
-					})
-					.attr("y", function(d) {
-						return haut - (d.value * ch);
-					})
-					.attr("width", lb - barPadding)
-					.attr("height", function(d) {
-						return (d.value * ch);
-					})
-					.attr("fill", function(d) {
-						return "rgb(0, 0, " + (d.value * 10) + ")";
-					})
-					.append("title")
-					.text(function(d) {
-					return d.value;
-					});
-				
-				svg.selectAll("text")
-					.data(dataset)
-					.enter()
-					.append("text")
-					.text(function(d) {
-						return d.value;
-					})
-					.attr("x", function(d, i) {
-						return ((i) * lb) + 6;
-					})
-					.attr("y", function(d) {
-						return haut - ((d.value * ch)/2);
-					})
-					.attr("font-family", "sans-serif")
-					.attr("font-size", "6px")
-					.attr("fill", "white");
-			}
 			
-			//d3.json('data.json', draw);
-			draw2(JSON.parse(formatCurrencies()));
-			
-
+			var chart = c3.generate({
+					bindto: '#chartTrxNbr',
+					data: {
+						columns: [
+						['Transactions', #{totalRows}]
+						],
+						type: 'gauge',
+						onclick: function (d, i) { console.log("onclick", d, i); },
+						onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+						onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+					},
+					gauge: {
+						max:400000000,
+						Label : "Number of Transactions"
+					//        label: {
+					//            format: function(value, ratio) {
+					//                return value;
+					//            },
+					//            show: false // to turn off the min/max labels.
+					//        },
+					//    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+					//    max: 100, // 100 is default
+					//    units: ' %',
+					//    width: 39 // for adjusting arc thickness
+					},
+					color: {
+					pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
+					threshold: {
+					//            unit: 'value', // percentage is default
+					//            max: 200, // 100 is default
+					values: [#{totalRows}]
+					}
+					},
+					size: {
+					height: 180
+					}
+			});
