@@ -70,7 +70,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
 
 Transactions.prototype.getGlobalStats = function (callback) {
   
-  var query = 'q=*&facet=true&facet.field=' + config.currency + '&facet.field=' + config.level1 + '&facet.field=' + config.level2 + '&facet.field=' + config.level3 + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&rows=0';
+  var query = 'q=*&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&rows=0';
   console.log( 'Query : ' + query);
   client.get(config.solRcore + '/select', query, function(err, obj){
     if(err){
