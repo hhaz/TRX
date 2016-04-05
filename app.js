@@ -42,10 +42,16 @@ app.set('view options', { pretty: true });
 app.locals.pretty = true; 
 
 app.get('/', function(req, res){
-    res.render('home', {
-            title: 'Trx Display Test'
-        });
-});
+      transactions.getGlobalStats(function(error,obj){
+      res.render( 'home', {
+            title: 'D3JS Test' ,
+            totalRows : obj.response.numFound,
+            currencies : obj.facet_counts.facet_fields.Currency,
+            TrxType : obj.facet_counts.facet_fields.TrxType,
+            AppType : obj.facet_counts.facet_fields.AppType
+        })
+      });
+    });
 
 app.post('/go/:pageId', function(req, res){
     transactions.getTransactions(req.params.pageId,req.param('montantMin'), req.param('montantMax'), req.param('dateMin'), req.param('dateMax'),function(error,docs,facetList,facetPivot,total){
