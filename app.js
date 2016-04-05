@@ -44,7 +44,7 @@ app.locals.pretty = true;
 app.get('/', function(req, res){
       transactions.getGlobalStats(function(error,obj){
       res.render( 'home', {
-            title: 'D3JS Test' ,
+            title: 'Transactions Display' ,
             totalRows : obj.response.numFound,
             currencies : obj.facet_counts.facet_fields.Currency,
             TrxType : obj.facet_counts.facet_fields.TrxType,

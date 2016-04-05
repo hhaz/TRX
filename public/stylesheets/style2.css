@@ -104,8 +104,19 @@ header {
   border-radius: 3px;
   border: 1px solid #ccc;
 }
+.trxContainer {
+  width: 85%;
+  height: 60%;
+  font-size: 12px;
+  float: left;
+  margin: 5px 0px 0px 10px;
+  background-color: #fafafa;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  overflow: auto;
+}
 .container {
-  width: 90%;
+  width: 98%;
   height: 25%;
   font-size: 12px;
   float: left;
