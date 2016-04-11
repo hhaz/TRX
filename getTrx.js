@@ -1,7 +1,7 @@
 var ZipWriter = require("moxie-zip").ZipWriter;
 var solr = require('solr-client');
 var config = require('./config');
-var client = solr.createClient();
+var client = solr.createClient(config.host,config.port);
 
 Transactions = function() {
 };
@@ -22,7 +22,7 @@ if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
   }
 
-  var query = 'q=*' + fq + '&rows=30&start=' + page*30;
+  var query = 'q=*' + fq + '&rows=' + config.rowPerPage + '&start=' + page*config.rowPerPage;
  
   client.get( config.solRcore + '/select', query, function(err, obj){
     if(err){
@@ -57,7 +57,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
   }
 
-  var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.level1 + '&facet.field=' + config.level2 + '&facet.field=' + config.level3 + '&facet.field=' + config.trxType + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.level1 + ',' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true%20count=true}' + config.amount + '&rows=30&start=' + page*30 + '&sort=DateTicket+Desc';
+  var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.level1 + '&facet.field=' + config.level2 + '&facet.field=' + config.level3 + '&facet.field=' + config.trxType + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.level1 + ',' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true%20count=true}' + config.amount + '&rows=' + config.rowPerPage +'&start=' + page*config.rowPerPage + '&sort=DateTicket+Desc';
   console.log( "Query : ",query);
   client.get(config.solRcore + '/select', query, function(err, obj){
     if(err){
@@ -140,13 +140,18 @@ Transactions.prototype.export = function (montantMin, montantMax, dateMin, dateM
   }
 }
 
-function cursorMarkLoop (query, cursorMark, zip) {
+function cursorMarkLoop (query, cursorMark, callback, data) {
+  cursorMark = cursorMark.replace(new RegExp( "\\+", "g" ), 
+        "%2B" 
+        ); // escape + character interpreted as space otherwise
   queryCM = query + "&cursorMark=" + cursorMark;
-  var data = "";
   client.get(config.solRcore + '/select', queryCM, function(err, obj) {
-    if ( obj == null ) {
-      zip.toBuffer(function(buf) {
-        return buf;
+    newCursorMark = obj.nextCursorMark;
+    if ( newCursorMark == cursorMark ) {
+        var zip = new ZipWriter();
+        zip.addData("export.txt", data);  
+        zip.toBuffer(function(buf) {
+        return callback(null,buf);
       });
     }
     else {
@@ -154,22 +159,15 @@ function cursorMarkLoop (query, cursorMark, zip) {
         {
           data += obj.response.docs[trx][config.dateTicket] + "," + obj.response.docs[trx][config.dateServer] + "," + obj.response.docs[trx][config.currency] + "," + obj.response.docs[trx][config.amount] + "\r\n";
         }
-      zip.addData("export.txt", data);  
-      newCursorMark = obj.nextCursorMark;
-      return cursorMarkLoop( query, newCursorMark, zip);
+      return cursorMarkLoop( query, newCursorMark, callback, data);
     }
   });
 }
 
 Transactions.prototype.exportWithCursor = function (montantMin, montantMax, dateMin, dateMax, totalRecords, res, callback) {
   var query = "";
-  var rowsPerIteration = 500;
+  var rowsPerIteration = 1000;
   var data = "";
-  var last = false;
-  var nbLoops = 0;
-  var inserted =0;
-  var zip = new ZipWriter();
-
   var fq = "";
 
   if (montantMin != "" && montantMax != "" ) {
@@ -180,36 +178,11 @@ Transactions.prototype.exportWithCursor = function (montantMin, montantMax, date
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]'  + '&sort=DateTicket+Desc,id+Asc';
   }
 
-  var notDone = true;
+  query = "q=*" + fq + '&rows=' + rowsPerIteration;
 
-  query = "q=*" + fq;
+  var data = "";
+  cursorMarkLoop( query , '*', callback, data );
 
-  //var buf = cursorMarkLoop( query , '*', zip);
-  console.log ("buf : ", cursorMarkLoop( query , '*', zip));
-
-  //callback(null, buf);
-
-  /*while (notDone) {    
-    //console.log( "Not Done : ", notDone);
-    client.get(config.solRcore + '/select', query, function(err, obj) {
-      if(err){
-        console.log(err);
-      } else {
-        for(var trx in obj.response.docs)
-        {
-          data += obj.response.docs[trx][config.dateTicket] + "," + obj.response.docs[trx][config.dateServer] + "," + obj.response.docs[trx][config.currency] + "," + obj.response.docs[trx][config.amount] + "\r\n";
-        }
-        console.log( "cursorMark :", obj.response.cursorMark);
-      }
-      if(notDone == false) {  
-        zip.addData("export.txt", data);  
-        zip.toBuffer(function(buf) {
-        callback(null,buf);
-      });
-      }
-     }
-    );
-  } */
 }
 
 exports.Transactions = Transactions;

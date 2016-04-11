@@ -56,11 +56,11 @@ app.get('/', function(req, res){
 app.post('/go/:pageId', function(req, res){
     transactions.getTransactions(req.params.pageId,req.param('montantMin'), req.param('montantMax'), req.param('dateMin'), req.param('dateMax'),function(error,docs,facetList,facetPivot,total){
     
-if(error) {
-  res.render('error' );
-}
-else
-{
+  if(error) {
+    res.render('error' );
+  }
+  else
+  {
     var pageNext = parseInt(req.params.pageId) + 1;
     var pagePrev;
 
