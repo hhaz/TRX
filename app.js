@@ -143,5 +143,20 @@ transactions.export( req.param('montantMin'), req.param('montantMax'),  req.para
     });
  });
 
+app.post('/go/file/exportWithCursor', function(req, res) {
+transactions.exportWithCursor( req.param('montantMin'), req.param('montantMax'),  req.param('dateMin'), req.param('dateMax'), req.param('totalRecords'), res, function (error,data) {
+        if(error) {
+          res.render('error');
+        }
+        else {
+        res.set({'Content-Type' :'application/octet-stream', 
+          'Content-length' : data.length , 
+          'Content-disposition' :'attachment; filename=export.zip'});
+        res.send(data);
+      }
+    });
+ });
+
+
 app.listen(3000);
 console.log("Started ! Using Core : " + config.solRcore);

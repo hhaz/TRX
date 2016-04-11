@@ -1,9 +1,11 @@
-  <field name="Amount" type="double" indexed="true" stored="true"/>
-  <field name="AppType" type="string" indexed="true" stored="true"/>
-  <field name="Currency" type="string" indexed="true" stored="true"/>
-  <field name="DateServer" type="date" indexed="true" stored="true"/>
-  <field name="DateTicket" type="date" indexed="true" stored="true"/>
-  <field name="Level1" type="string" indexed="true" stored="true"/>
-  <field name="Level2" type="string" indexed="true" stored="true"/>
-  <field name="Level3" type="string" indexed="true" stored="true"/>
-  <field name="TrxType" type="string" indexed="true" stored="true"/>
+  <field name="Amount" type="double" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="AppType" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="Currency" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="DateServer" type="date" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="DateTicket" type="date" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="Level1" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="Level2" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="Level3" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="TrxType" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
+  <uniqueKey>id</uniqueKey>
