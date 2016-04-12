@@ -1,6 +1,6 @@
 var config = {};
 
-config.solRcore = 'trx2';
+config.solRcore = 'trx4';
 config.amount = 'Amount';
 config.dateTicket = 'DateTicket';
 config.dateServer = 'DateServer';

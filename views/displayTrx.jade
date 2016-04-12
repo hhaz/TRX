@@ -2,6 +2,8 @@ extend layout2
 h1=title
 
 block facets
+  script(src='/testIO.js')
+  script(src='/socket.io.js')
   h2 Facets
   li #{totalRecords} transactions
   - each facet in facets

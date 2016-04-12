@@ -83,7 +83,8 @@ app.post('/go/:pageId', function(req, res){
             dateMax : req.param('dateMax'),
             dateMin : req.param('dateMin'),
             totalRecords:total,
-            config : config
+            config : config,
+            io : io
           });
       }
       });
@@ -158,5 +159,16 @@ transactions.exportWithCursor( req.param('montantMin'), req.param('montantMax'),
  });
 
 
-app.listen(3000);
+//app.listen(3000);
+
+// With Socket.io
+io = require('socket.io').listen(app.listen(3000));
+
+io.sockets.on('connection', function (socket) {
+    socket.emit('message', { message: 'welcome to the chat' });
+    socket.on('send', function (data) {
+        io.sockets.emit('message', data);
+    });
+});
+
 console.log("Started ! Using Core : " + config.solRcore);
