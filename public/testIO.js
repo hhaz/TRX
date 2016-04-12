@@ -1,13 +1,13 @@
 window.onload = function() {
  
-    var messages = [];
     var socket = io.connect('http://localhost:3000');
-    var field = document.getElementById("field");
-    var sendButton = document.getElementById("send");
-    var content = document.getElementById("content");
- 
+    var progress = document.getElementById("progress");
+
+    console.log( 'connecting');
+    
     socket.on('message', function (data) {
-        console.log( "kzelrkjzlekrj");
+        console.log( data);
+        progress.innerHTML = data;
         /*if(data.message) {
             messages.push(data.message);
             var html = '';
