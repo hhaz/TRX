@@ -140,12 +140,13 @@ Transactions.prototype.export = function (montantMin, montantMax, dateMin, dateM
   }
 }
 
-function cursorMarkLoop (query, cursorMark, callback, nbTrx, data) {
+function cursorMarkLoop (query, cursorMark, callback, nbTrx, res, data) {
   cursorMark = cursorMark.replace(new RegExp( "\\+", "g" ), 
         "%2B" 
         ); // escape + character interpreted as space otherwise
   queryCM = query + "&cursorMark=" + cursorMark;
-  io.sockets.emit('message', nbTrx);
+  io.sockets.emit('update', nbTrx);
+  //res.write('<p>percent complete: '+ nbTrx);
   client.get(config.solRcore + '/select', queryCM, function(err, obj) {
     newCursorMark = obj.nextCursorMark;
     if ( newCursorMark == cursorMark ) {
@@ -161,7 +162,7 @@ function cursorMarkLoop (query, cursorMark, callback, nbTrx, data) {
           data += obj.response.docs[trx][config.dateTicket] + "," + obj.response.docs[trx][config.dateServer] + "," + obj.response.docs[trx][config.currency] + "," + obj.response.docs[trx][config.amount] + "\r\n";
         }
       nbTrx += 1000; // to be replaced with rowsPerIteration
-      return cursorMarkLoop( query, newCursorMark, callback, nbTrx, data);
+      return cursorMarkLoop( query, newCursorMark, callback, nbTrx, res, data);
     }
   });
 }
@@ -184,7 +185,7 @@ Transactions.prototype.exportWithCursor = function (montantMin, montantMax, date
 
   var data = "";
 
-  cursorMarkLoop( query , '*', callback, rowsPerIteration, data );
+  cursorMarkLoop( query , '*', callback, rowsPerIteration, res, data );
 
 }
 
