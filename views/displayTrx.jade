@@ -13,8 +13,11 @@ block facets
   hr
   form(method="post")
    input(type="submit",name="export",value="export",formaction="/go/file/export")
+   hr
    input(type="submit",name="exportwithcursorMark",value="export with cursorMark",formaction="/go/file/exportWithCursor")
+   hr
    progress(id="progress",value="0",max="#{totalRecords}")
+   hr
    input(type="hidden",name="montantMin",id="montantMin",value="#{montantMin}")
    input(type="hidden",name="montantMax",id="montantMax",value="#{montantMax}")
    input(type="hidden", name="dateMin", id="dateMin",value="#{dateMin}")

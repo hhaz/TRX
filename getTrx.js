@@ -145,6 +145,7 @@ function cursorMarkLoop (query, cursorMark, callback, nbTrx, res, data) {
         "%2B" 
         ); // escape + character interpreted as space otherwise
   queryCM = query + "&cursorMark=" + cursorMark;
+  res.write(" ");
   io.sockets.emit('update', nbTrx);
   //res.write('<p>percent complete: '+ nbTrx);
   client.get(config.solRcore + '/select', queryCM, function(err, obj) {
