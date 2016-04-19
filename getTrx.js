@@ -153,6 +153,7 @@ function cursorMarkLoop (query, cursorMark, callback, nbTrx, res, data) {
         var zip = new ZipWriter();
         zip.addData("export.txt", data);  
         zip.toBuffer(function(buf) {
+          io.sockets.emit('end');
         return callback(null,buf);
       });
     }

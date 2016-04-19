@@ -4,7 +4,10 @@ window.onload = function() {
     var progressBar = document.getElementById("progress");
 
     socket.on('update', function (data) {
-        console.log( data);
         progressBar.value = data;
+    });
+
+     socket.on('end', function () {
+        progressBar.value = 0;
     });
 }
