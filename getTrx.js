@@ -162,7 +162,7 @@ function cursorMarkLoop (query, cursorMark, callback, nbTrx, res, data) {
         {
           data += obj.response.docs[trx][config.dateTicket] + "," + obj.response.docs[trx][config.dateServer] + "," + obj.response.docs[trx][config.currency] + "," + obj.response.docs[trx][config.amount] + "\r\n";
         }
-      nbTrx += 10000; // to be replaced with rowsPerIteration
+      nbTrx += config.exportRowsPerIteration; // to be replaced with rowsPerIteration
       return cursorMarkLoop( query, newCursorMark, callback, nbTrx, res, data);
     }
   });
@@ -170,7 +170,6 @@ function cursorMarkLoop (query, cursorMark, callback, nbTrx, res, data) {
 
 Transactions.prototype.exportWithCursor = function (montantMin, montantMax, dateMin, dateMax, totalRecords, res, callback) {
   var query = "";
-  var rowsPerIteration = 10000;
   var data = "";
   var fq = "";
 
@@ -182,11 +181,11 @@ Transactions.prototype.exportWithCursor = function (montantMin, montantMax, date
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]'  + '&sort=DateTicket+Desc,id+Asc';
   }
 
-  query = "q=*" + fq + '&rows=' + rowsPerIteration;
+  query = "q=*" + fq + '&rows=' + config.exportRowsPerIteration;
 
   var data = "";
 
-  cursorMarkLoop( query , '*', callback, rowsPerIteration, res, data );
+  cursorMarkLoop( query , '*', callback, config.exportRowsPerIteration, res, data );
 
 }
 

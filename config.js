@@ -1,6 +1,6 @@
 var config = {};
 
-config.solRcore = 'trx4';
+config.solRcore = 'trx5';
 config.amount = 'Amount';
 config.dateTicket = 'DateTicket';
 config.dateServer = 'DateServer';
@@ -13,5 +13,14 @@ config.level3 = "Level3";
 config.host = 'localhost';
 config.port = 8983;
 config.rowPerPage = 30;
+config.exportRowsPerIteration = 10000;
+
+config.nbDays = 720;
+config.nbSecondsBetweenTicketAndServer = 120;
+config.maxAmount = 3000;
+
+config.generateTrx = true;
+config.commitAfter = 100000;
+config.trxBlock = 10000;
 
 module.exports = config;

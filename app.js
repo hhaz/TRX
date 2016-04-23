@@ -5,10 +5,11 @@ var config = require('./config');
 XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 document = require('jsdom').jsdom();
 d3 = require('d3');
-
 var Transactions = require('./getTrx').Transactions;
+var GenerateTransactions = require('./generateTrx').generateTransactions;
 
 var transactions = new Transactions();
+var generateTransactions = new GenerateTransactions();
 
 var app = express();
 
@@ -171,4 +172,10 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
+if( config.generateTrx) {
+  setInterval(generateTransactions.generate, 1000);
+}
+
 console.log("Started ! Using Core : " + config.solRcore);
+
+
