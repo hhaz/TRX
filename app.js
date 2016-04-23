@@ -173,9 +173,9 @@ io.sockets.on('connection', function (socket) {
 });
 
 if( config.generateTrx) {
-  setInterval(generateTransactions.generate, 1000);
+  setInterval(generateTransactions.generate, config.generationFrequency);
 }
 
-console.log("Started ! Using Core : " + config.solRcore);
+console.log("Started ! Using Core : " + config.solRcore + " transaction generation : " + config.generateTrx);
 
 
