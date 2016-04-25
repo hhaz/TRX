@@ -1,0 +1,60 @@
+doctype html5
+html
+  head
+    title NodeJS & solR Transactions Display
+    link(rel='stylesheet',href='/stylesheets/style2.css')
+    link(rel='stylesheet', href='/stylesheets/d3.css')
+    link(href="c3-0.4.10/c3.css" rel="stylesheet" type="text/css")
+
+  body
+    header
+      h1 #{title}
+  div(id="chartTrxCurrentDay")
+    script(src='d3.js')
+    script(src='c3-0.4.10/c3.min.js')
+    script.
+      function trxCurrentDay() {
+        var trxString = '["Transactions",';
+        var xString = '["x",';
+        var loadString = "";
+        var arrayTrx = "#{transactions}".split(",");
+        for (i=0;i<arrayTrx.length;i+=2) {
+          var tempDate = new Date (arrayTrx[i]);
+          xString += '"' + tempDate.getHours() + '"';
+          console.log( xString);
+          trxString += arrayTrx[i+1];
+          if(i < arrayTrx.length - 2) {
+            trxString += ",";
+            xString += ",";
+          }
+        else {
+          trxString += "]";
+          xString += "]";
+          }
+        } 
+        loadString = '{"columns": [' + xString + ',' + trxString + ']}';
+        return loadString;
+      }
+
+      var chartTrxPerDay = c3.generate({
+          bindto: '#chartTrxCurrentDay',
+          data: {
+              x : 'x',
+              columns: [
+                  ['x'],
+                  ['Transactions'],
+              ],
+              type: 'bar'
+          },
+          axis: {
+              x: {
+                  type: 'Nbr' // this needed to load string x value
+              },
+              y: {
+              tick: {
+                format: d3.format(".2s,") 
+              }
+            }
+          }
+      });
+      chartTrxPerDay.load(JSON.parse(trxCurrentDay()));

@@ -1,7 +1,7 @@
 var ZipWriter = require("moxie-zip").ZipWriter;
 var solr = require('solr-client');
 var config = require('./config');
-var client = solr.createClient(config.host,config.port);
+var client = solr.createClient(config.host,config.port,config.solRcore);
 
 Transactions = function() {
 };
@@ -24,7 +24,7 @@ if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )
 
   var query = 'q=*' + fq + '&rows=' + config.rowPerPage + '&start=' + page*config.rowPerPage;
  
-  client.get( config.solRcore + '/select', query, function(err, obj){
+  client.get( 'select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
@@ -59,7 +59,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
 
   var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.level1 + '&facet.field=' + config.level2 + '&facet.field=' + config.level3 + '&facet.field=' + config.trxType + '&facet.field=' + config.appType +'&facet.pivot={!stats=piv1}' + config.level1 + ',' + config.currency + ',' + config.trxType +',' + config.appType +'&stats=true&stats.field={!tag=piv1%20sum=true%20count=true}' + config.amount + '&rows=' + config.rowPerPage +'&start=' + page*config.rowPerPage + '&sort=DateTicket+Desc';
   console.log( "Query : ",query);
-  client.get(config.solRcore + '/select', query, function(err, obj){
+  client.get('select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
@@ -73,7 +73,7 @@ Transactions.prototype.getGlobalStats = function (callback) {
   
   var query = 'q=*&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&rows=0';
   console.log( 'Query : ' + query);
-  client.get(config.solRcore + '/select', query, function(err, obj){
+  client.get('select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
@@ -120,7 +120,7 @@ Transactions.prototype.export = function (montantMin, montantMax, dateMin, dateM
     
     query = "q=*" + fq + "&rows=" + rowsToRetrieve + "&start=" + i;
 
-    client.get(config.solRcore + '/select', query, function(err, obj) {
+    client.get('select', query, function(err, obj) {
       if(err){
         console.log(err);
       } else {
@@ -147,7 +147,7 @@ function cursorMarkLoop (query, cursorMark, callback, nbTrx, res, data) {
   queryCM = query + "&cursorMark=" + cursorMark;
   res.writeContinue();
   io.sockets.emit('update', nbTrx);
-  client.get(config.solRcore + '/select', queryCM, function(err, obj) {
+  client.get('select', queryCM, function(err, obj) {
     newCursorMark = obj.nextCursorMark;
     if ( newCursorMark == cursorMark ) {
         var zip = new ZipWriter();
@@ -186,6 +186,28 @@ Transactions.prototype.exportWithCursor = function (montantMin, montantMax, date
   var data = "";
 
   cursorMarkLoop( query , '*', callback, config.exportRowsPerIteration, res, data );
+
+}
+
+Transactions.prototype.getTrxPerHour = function (dateMin, callback) {
+
+  if(dateMin == "") {
+    var currentDate = new Date();
+    var currentDateString = currentDate.getYear() + '-' + currentDate.getMonth() + '-' + currentDate.getDay();
+  }
+  else {
+    currentDateString = dateMin;
+  }
+  
+  var queryString = "q=*&facet=true&facet.range=DateServer&f.DateServer.facet.range.start=" +  currentDateString + 'T00:00:00Z' +"&f.DateServer.facet.range.end=" +  currentDateString + 'T23:59:59Z' +"&f.DateServer.facet.range.gap=%2B1HOUR&rows=0";
+
+    client.get( 'select', queryString, function(err, obj){
+    if(err){
+      console.log(err);
+    } else {
+      callback(null, obj.facet_counts.facet_ranges.DateServer.counts);
+  }
+});
 
 }
 

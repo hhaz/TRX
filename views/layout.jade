@@ -32,6 +32,7 @@ html
          td 
           div
            input(type="date", name="dateMin", id="dateMin")
+           input(type="submit", value="testPerHour" , formaction = "/testPerHourDisplay")
          tr
          td Date Max
          td 
@@ -119,9 +120,6 @@ html
                   ['x'],
                   ['Transactions'],
               ],
-              groups: [
-                  ['download']
-              ],
               type: 'bar'
           },
           axis: {
@@ -144,9 +142,6 @@ html
               columns: [
                   ['x'],
                   ['Currencies'],
-              ],
-              groups: [
-                  ['download']
               ],
               type: 'bar'
           },
@@ -218,4 +213,5 @@ html
           height: 180
           }
       });
+
 

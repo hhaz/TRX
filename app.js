@@ -160,6 +160,22 @@ transactions.exportWithCursor( req.param('montantMin'), req.param('montantMax'),
  });
 
 
+app.post('/testPerHourDisplay', function(req, res){
+    transactions.getTrxPerHour(req.param('dateMin'), function(error,obj){
+    
+  if(error) {
+    res.render('error' );
+  }
+  else
+  {
+    res.render('trxPerDay', {
+            title: 'Transaction Journal Per Day',
+            transactions: obj,
+          });
+  }
+});
+});
+
 //app.listen(3000);
 
 // With Socket.io
