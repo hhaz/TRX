@@ -22,9 +22,9 @@ config.exportRowsPerIteration = 10000;
 config.nbDays = 720;
 config.nbSecondsBetweenTicketAndServer = 120;
 config.maxAmount = 3000;
-config.generateTrx = false;
+config.generateTrx = true;
 config.commitAfter = 100000;
 config.trxBlock = 10000;
-config.generationFrequency = 3000;
+config.generationFrequency = 20000;
 
 module.exports = config;

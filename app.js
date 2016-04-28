@@ -161,7 +161,56 @@ transactions.exportWithCursor( req.param('montantMin'), req.param('montantMax'),
 
 
 app.post('/testPerHourDisplay', function(req, res){
-    transactions.getTrxPerHour(req.param('dateMin'), function(error,obj){
+    transactions.getTrxPerPeriod("HOUR" , req.param('dateMin'), function(error,obj){
+    
+  if(error) {
+    res.render('error' );
+  }
+  else
+  {
+    res.render('trxPerDay', {
+            title: 'Transaction Journal Per Day',
+            transactions: obj,
+          });
+  }
+});
+});
+
+app.post('/testPerWeekDisplay', function(req, res){
+    transactions.getTrxPerPeriod("WEEK" , req.param('dateMin'), function(error,obj){
+    
+  if(error) {
+    res.render('error' );
+  }
+  else
+  {
+    res.render('trxPerDay', {
+            title: 'Transaction Journal Per Day',
+            transactions: obj,
+          });
+  }
+});
+});
+
+app.post('/testPerDayDisplay', function(req, res){
+    transactions.getTrxPerPeriod("DAY" , req.param('dateMin'), function(error,obj){
+    
+  if(error) {
+    res.render('error' );
+  }
+  else
+  {
+    res.render('trxPerDay', {
+            title: 'Transaction Journal Per Day',
+            transactions: obj,
+          });
+  }
+});
+});
+
+
+app.post('/testPerMonthDisplay', function(req, res){
+    transactions.getTrxPerPeriod("MONTH" , req.param('dateMin'), function(error,obj){
     
   if(error) {
     res.render('error' );

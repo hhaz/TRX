@@ -123,10 +123,13 @@ generateTransactions.prototype.generate = function () {
   }
 
   trxGenerated += config.trxBlock;
+  io.sockets.emit('updateGraph', trxGenerated);
   if( trxGenerated % config.commitAfter == 0) {
    clientGenerateTrx.commit(function(err,res){
        if(err) console.log(err);
-       if(res) console.log("Committing ", trxGenerated , res);
+       if(res) {
+        console.log("Committing ", trxGenerated , res);
+      }
     });
   }
 
@@ -136,6 +139,5 @@ generateTransactions.prototype.generate = function () {
    }
 });
 }
-
 
 exports.generateTransactions = generateTransactions;

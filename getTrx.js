@@ -189,17 +189,45 @@ Transactions.prototype.exportWithCursor = function (montantMin, montantMax, date
 
 }
 
-Transactions.prototype.getTrxPerHour = function (dateMin, callback) {
+Date.prototype.addDays = function (num) {
+    var value = this.valueOf();
+    value += 86400000 * num;
+    return new Date(value);
+}
 
+Transactions.prototype.getTrxPerPeriod = function (period, dateMin, callback) {
+
+  var dateMax;
+  
   if(dateMin == "") {
-    var currentDate = new Date();
-    var currentDateString = currentDate.getYear() + '-' + currentDate.getMonth() + '-' + currentDate.getDay();
+    startDate = new Date();
   }
   else {
-    currentDateString = dateMin;
+    startDate = new Date(dateMin);
   }
-  
-  var queryString = "q=*&facet=true&facet.range=DateServer&f.DateServer.facet.range.start=" +  currentDateString + 'T00:00:00Z' +"&f.DateServer.facet.range.end=" +  currentDateString + 'T23:59:59Z' +"&f.DateServer.facet.range.gap=%2B1HOUR&rows=0";
+
+  var currentDateString = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
+
+  switch(period) {
+    case "WEEK" :
+      dateMax = startDate.addDays(7);
+      break;
+    case "DAY" :
+      dateMax = startDate.addDays(1);
+      break;
+    case "MONTH" :
+      dateMax = startDate.add(1).month();
+      break;
+    case "HOUR" :
+      dateMax = new Date(startDate);
+      break;
+  }
+
+  var maxDateString = dateMax.getFullYear() + '-' + (dateMax.getMonth() + 1) + '-' + dateMax.getDate();
+
+  console.log( "currentDateString : " , currentDateString , " maxdateString : " , maxDateString);
+
+  var queryString = "q=*&facet=true&facet.range=DateServer&f.DateServer.facet.range.start=" +  currentDateString + 'T00:00:00Z' +"&f.DateServer.facet.range.end=" +  maxDateString + 'T23:59:59Z' +"&f.DateServer.facet.range.gap=%2B1" + period + "&rows=0";
 
     client.get( 'select', queryString, function(err, obj){
     if(err){

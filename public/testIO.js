@@ -10,4 +10,34 @@ window.onload = function() {
      socket.on('end', function () {
         progressBar.value = 0;
     });
+
+    socket.on('updateGraph', function (data) {
+        var chartDiv = document.getElementById("chartTrxGenerated");
+
+        var chart = c3.generate({
+          bindto: chartDiv,
+          data: {
+            columns: [
+            ['Transactions', data]
+            ],
+            type: 'gauge',
+            onclick: function (d, i) { console.log("onclick", d, i); },
+            onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+            onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+          },
+          gauge: {
+            max:10000000,
+            Label : "Number of Transactions"
+          },
+          color: {
+          pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
+          threshold: {
+          values: [data]
+          }
+          },
+          size: {
+          height: 180
+          }
+      });
+    });
 }

@@ -33,6 +33,9 @@ html
           div
            input(type="date", name="dateMin", id="dateMin")
            input(type="submit", value="testPerHour" , formaction = "/testPerHourDisplay")
+           input(type="submit", value="testPerDay" , formaction = "/testPerDayDisplay")
+           input(type="submit", value="testPerWeek" , formaction = "/testPerWeekDisplay")
+           input(type="submit", value="testPerMonth" , formaction = "/testPerMonthDisplay")
          tr
          td Date Max
          td 
@@ -45,9 +48,12 @@ html
   div(id="chartTrxType")
   div(id="chartCurrency")
   div(id="chartAppType")
+  div(id="chartTrxGenerated")
   div(id="chartTrxNbr")
     script(src='d3.js')
     script(src='c3-0.4.10/c3.min.js')
+    script(src='/testIO.js')
+    script(src='/socket.io.js')
     script.
       function formatCurrencies() {
         var trxString = '["Currencies",';
@@ -213,5 +219,32 @@ html
           height: 180
           }
       });
+
+      var chartGeneratedTrx = c3.generate({
+          bindto: '#chartTrxGenerated',
+          data: {
+            columns: [
+            ['Transactions', 0]
+            ],
+            type: 'gauge',
+            onclick: function (d, i) { console.log("onclick", d, i); },
+            onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+            onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+          },
+          gauge: {
+            max:10000000,
+            Label : "Generated Transactions"
+          },
+          color: {
+          pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
+          threshold: {
+          values: [0]
+          }
+          },
+          size: {
+          height: 180
+          }
+      });
+
 
 
