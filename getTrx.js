@@ -1,4 +1,4 @@
-var ZipWriter = require("moxie-zip").ZipWriter;
+  var ZipWriter = require("moxie-zip").ZipWriter;
 var solr = require('solr-client');
 var config = require('./config');
 var client = solr.createClient(config.host,config.port,config.solRcore);
@@ -6,7 +6,12 @@ var client = solr.createClient(config.host,config.port,config.solRcore);
 Transactions = function() {
 };
 
-Transactions.prototype.getTransactionsOnly = function (page,montantMin, montantMax, dateMin, dateMax, callback) {
+Transactions.prototype.getTransactionsOnly = function (cursorMark,montantMin, montantMax, dateMin, dateMax, callback) {
+
+cursorMark = cursorMark.replace(new RegExp( "\\+", "g" ), 
+        "%2B" 
+        ); // escape + character interpreted as space otherwise
+
 if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )){
     console.log ("Empty or incomplete parameters");
      callback("Empty or incomplete parameters");
@@ -18,17 +23,17 @@ if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )
     fq += "&fq=" + config.amount +':[' + montantMin + '%20TO%20' + montantMax +']';
   }
 
-  if (dateMin != "" && dateMax != "" ) {
+  if (typeof dateMin !== 'undefined' && typeof dateMax !== 'undefined' ) {
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
   }
 
-  var query = 'q=*' + fq + '&rows=' + config.rowPerPage + '&start=' + page*config.rowPerPage;
+  var query = 'q=*' + fq + '&rows=' + config.rowPerPage + '&sort=DateTicket+Desc,id+Asc'+ "&cursorMark=" + cursorMark;
  
   client.get( 'select', query, function(err, obj){
     if(err){
       console.log(err);
     } else {
-      callback(null, obj.response.docs, obj.response.numFound);
+      callback(null, obj.response.docs, obj.response.numFound, obj.nextCursorMark);
   }
 });
 }
@@ -53,7 +58,7 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
     fq += "&fq=" + config.amount +':[' + montantMin + '%20TO%20' + montantMax +']';
   }
 
-  if (dateMin != "" && dateMax != "" ) {
+  if (typeof dateMin !== 'undefined' && typeof dateMax !== 'undefined' ) {
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
   }
 
@@ -68,6 +73,43 @@ Transactions.prototype.getTransactions = function (page,montantMin, montantMax, 
 });
 }
 }
+
+Transactions.prototype.getStatsOnly = function (montantMin, montantMax, dateMin, dateMax, callback) {
+  console.log("date Min : '", dateMin + "'");
+  console.log("date Max : '", dateMax + "'");
+  console.log("montant Min : '", montantMin + "'");
+  console.log("montant Max : '", montantMax + "'");
+
+
+ if ((montantMin == "" || montantMax == "" ) && (dateMin == "" || dateMax == "" )){
+    console.log ("Empty or incomplete parameters");
+     callback("Empty or incomplete parameters");  
+  }
+
+ else {   
+  var fq = "";
+
+  if (montantMin != "" && montantMax != "" ) {
+    fq += "&fq=" + config.amount +':[' + montantMin + '%20TO%20' + montantMax +']';
+  }
+
+  if (typeof dateMin !== 'undefined' && typeof dateMax !== 'undefined' ) {
+    fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
+  }
+
+  var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&rows=0';
+
+  console.log( "Query : ",query);
+  client.get('select', query, function(err, obj){
+    if(err){
+      console.log(err);
+    } else {
+      callback(null, obj);
+  }
+});
+}
+}
+
 
 Transactions.prototype.getGlobalStats = function (callback) {
   

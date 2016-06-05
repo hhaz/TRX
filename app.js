@@ -91,26 +91,25 @@ app.post('/go/:pageId', function(req, res){
       });
 });
 
-app.get('/api/getTrx', function(req, res){ // http://localhost:3000/api/getTrx?page=0&montantMin=1&montantMax=3
-  page       = req.query["page"];
+app.get('/api/getTrx', function(req, res){ // http://localhost:3000/api/getTrx?cursorMark=*&montantMin=1&montantMax=3
+  cursorMark = req.query["cursorMark"];
   montantMin = req.query["montantMin"];
   montantMax = req.query["montantMax"];
   dateMax = req.query["dateMax"];
   dateMin = req.query["dateMin"];
   console.log("Call to /api/getTrx");
-    transactions.getTransactionsOnly(page,montantMin, montantMax, dateMin, dateMax, function(error,docs,total){
-      res.send({totalRows : total, docs});
+    transactions.getTransactionsOnly(cursorMark,montantMin, montantMax, dateMin, dateMax, function(error,docs,total,NextCursorMark){
+      res.send({totalRows : total, trx : docs, nextCursorMark : NextCursorMark});
       });
 });
 
-app.get('/api/getStats', function(req, res){ // http://localhost:3000/api/getStats?page=0&montantMin=1&montantMax=3
-  page       = req.query["page"];
+app.get('/api/getStats', function(req, res){ // http://localhost:3000/api/getStats?montantMin=1&montantMax=3
   montantMin = req.query["montantMin"];
   montantMax = req.query["montantMax"];
   dateMax = req.query["dateMax"];
   dateMin = req.query["dateMin"];
-      transactions.getTransactions(page,montantMin, montantMax, dateMin, dateMax, function(error,docs,facetList,facetPivot,total){
-      res.send(facetPivot);
+      transactions.getStatsOnly(montantMin, montantMax, dateMin, dateMax, function(error,docs){
+      res.send(docs);
       });
 });
 
