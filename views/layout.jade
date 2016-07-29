@@ -5,6 +5,10 @@ html
     link(rel='stylesheet',href='/stylesheets/style2.css')
     link(rel='stylesheet', href='/stylesheets/d3.css')
     link(href="c3-0.4.10/c3.css" rel="stylesheet" type="text/css")
+    script(src='d3.js')
+    script(src='c3-0.4.10/c3.min.js')
+    script(src='/testIO.js')
+    script(src='/socket.io.js')
 
   body
     header
@@ -45,15 +49,11 @@ html
         br
         br
         input(type="submit", value="OK")
-  div(id="chartTrxType")
-  div(id="chartCurrency")
-  div(id="chartAppType")
-  div(id="chartTrxGenerated")
-  div(id="chartTrxNbr")
-    script(src='d3.js')
-    script(src='c3-0.4.10/c3.min.js')
-    script(src='/testIO.js')
-    script(src='/socket.io.js')
+    //div(id="chartTrxType")
+    //div(id="chartCurrency")
+    //div(id="chartAppType")
+    div(id="chartTrxNbr")
+    div(id="chartTrxGen")
     script.
       function formatCurrencies() {
         var trxString = '["Currencies",';
@@ -182,7 +182,7 @@ html
       chartAppType.load(JSON.parse(formatAppType()));
 
       
-      var chart = c3.generate({
+      var chartTrxNbr = c3.generate({
           bindto: '#chartTrxNbr',
           data: {
             columns: [
@@ -220,11 +220,11 @@ html
           }
       });
 
-      var chartGeneratedTrx = c3.generate({
-          bindto: '#chartTrxGenerated',
+      var chartTrxGen = c3.generate({
+          bindto: '#chartTrxGen',
           data: {
             columns: [
-            ['Transactions', 0]
+            ['New Transactions', 0]
             ],
             type: 'gauge',
             onclick: function (d, i) { console.log("onclick", d, i); },

@@ -11,14 +11,14 @@ window.onload = function() {
         progressBar.value = 0;
     });
 
-    socket.on('updateGraph', function (data) {
-        var chartDiv = document.getElementById("chartTrxGenerated");
+    /*socket.on('updateGraph', function (data) {
+        var chartDiv = document.getElementById("chartTrxGen");
 
-        var chart = c3.generate({
+        var chartTrxGen = c3.generate({
           bindto: chartDiv,
           data: {
             columns: [
-            ['Transactions', data]
+            ['New Transactions', data]
             ],
             type: 'gauge',
             onclick: function (d, i) { console.log("onclick", d, i); },
@@ -39,5 +39,5 @@ window.onload = function() {
           height: 180
           }
       });
-    });
+    });*/
 }

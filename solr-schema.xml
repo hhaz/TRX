@@ -7,5 +7,9 @@
   <field name="Level2" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
   <field name="Level3" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
   <field name="TrxType" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="P2PE" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="Settlement" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="Authorization" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
+  <field name="Merchant" type="string" omitNorms="true" omitTermFreqAndPositions="true" indexed="true" stored="true" docValues="true" omitPositions="true" required="true"/>
   <field name="id" type="string" multiValued="false" indexed="true" docValues="true" required="true" stored="true"/>
   <uniqueKey>id</uniqueKey>

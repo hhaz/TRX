@@ -1,7 +1,7 @@
 var config = {};
 
 // solR settings
-config.solRcore = 'trx5';
+config.solRcore = 'trx6';
 config.amount = 'Amount';
 config.dateTicket = 'DateTicket';
 config.dateServer = 'DateServer';

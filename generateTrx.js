@@ -2,9 +2,14 @@ var solr = require('solr-client');
 var config = require('./config');
 var clientGenerateTrx = solr.createClient(config.host,config.port,config.solRcore);
 
+var customerArray = ["LIDL", "Carrefour" , "Auchan" , "LVMH" , "Picard" , "Intermarche" , "McDonalds" , "TJMorris" , "NewLook"];
 var currencyArray = [ "EUR" , "EUR" , "EUR", "EUR" , "GBP", "GBP"];
 var paymentAppArray = ["EMV" , "EMV" , "EMV" , "EMV" , "EMV" , "EMV" , "CLS" , "CLS" , "CLS", "AME", "AME", "SSC"];
 var trxTypeArray = [ "Debit", "Debit","Debit","Debit","Debit", "Credit", "Credit"];
+var level1Array = ["HyperMarket" , "SuperMarket" , "Market"];
+var level2Array = { "HyperMarket" : ["Paris" , "Lille" , "Lyon" , "Marseille" , "Toulouse" , "Nantes" , "Strasbourg" , "Nancy" , "Toulon" , "Nice" , "Cannes"], 
+                    "SuperMarket" : ["Villejuif" , "Noisy Le Grand" , "Créteil" , "Versailles" , "Brest" , "Beauvais" , "Bourges" , "Brive" , "Montpellier"],
+                    "Market" : ["Vélizy" , "Fontainebleau" , "Clamart" , "Sèvres" , "Issy Les Moulineaux"]};
 var directionArray = [1, -1];
 
 var trxGenerated = 0;
@@ -101,9 +106,15 @@ generateTransactions.prototype.generate = function () {
   var paymentApp;
   var trxType;
   var currency;
+  var customer;
   var level1;
   var level2;
+  var level2TempArray;
+  var level3TempArray;
   var level3;
+  var authorization;
+  var P2PE;
+  var settlement;
   var amount;
 
   var docs = [];
@@ -112,13 +123,18 @@ generateTransactions.prototype.generate = function () {
    dateTicket = pseudoRandomDate(config.nbDays);
    dateServer = dateTicket.addSeconds(Math.round(config.nbSecondsBetweenTicketAndServer *  Math.random()));
    paymentApp = getRandomValue(paymentAppArray);
+   customer = getRandomValue(customerArray);
    trxType = getRandomValue(trxTypeArray);
    currency = getRandomValue(currencyArray);
-   level1 = "level1." + Math.round(Math.random()*10);
-   level2 = "level2." + Math.round(Math.random()*10);
+   level1 = getRandomValue(level1Array); 
+   level2TempArray = level2Array[level1];
+   level2 = getRandomValue(level2TempArray);
    level3 = "level3." + Math.round(Math.random()*10);
+   settlement = Math.round(Math.random());
+   P2PE = Math.round(Math.random());
+   authorization = Math.round(Math.random());
    amount = (config.maxAmount * Math.random()).toFixed(2);
-   var doc = { DateTicket : dateTicket, DateServer : dateServer, TrxType : trxType, Currency : currency, Amount : amount, AppType : paymentApp, Level1 : level1, Level2 : level2, Level3 : level3 }
+   var doc = { DateTicket : dateTicket, DateServer : dateServer, TrxType : trxType, Currency : currency, Amount : amount, AppType : paymentApp, Level1 : level1, Level2 : level2, Level3 : level3 , P2PE : P2PE, Settlement : settlement , Authorization : authorization , Merchant : customer}
    docs.push(doc);
   }
 
