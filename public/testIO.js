@@ -11,7 +11,7 @@ window.onload = function() {
         progressBar.value = 0;
     });
 
-    /*socket.on('updateGraph', function (data) {
+    socket.on('updateGraph', function (data) {
         var chartDiv = document.getElementById("chartTrxGen");
 
         var chartTrxGen = c3.generate({
@@ -39,5 +39,5 @@ window.onload = function() {
           height: 180
           }
       });
-    });*/
+    });
 }

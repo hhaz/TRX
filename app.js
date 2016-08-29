@@ -44,12 +44,21 @@ app.locals.pretty = true;
 
 app.get('/', function(req, res){
       transactions.getGlobalStats(function(error,obj){
+        var minDate = new Date(obj.stats.stats_fields.DateTicket.min);
+        var maxDate = new Date(obj.stats.stats_fields.DateTicket.max);
+        var minDateString = minDate.getFullYear().toString() + '/' + minDate.getMonth() + '/' + minDate.getDay();
+        var maxDateString = maxDate.getFullYear().toString() + '/' + maxDate.getMonth() + '/' + maxDate.getDay();
+
+        var totalRowsFormatted = Intl.NumberFormat().format(obj.response.numFound);
+
       res.render( 'home', {
             title: 'Transactions Display' ,
-            totalRows : obj.response.numFound,
+            totalRows : totalRowsFormatted,
             currencies : obj.facet_counts.facet_fields.Currency,
             TrxType : obj.facet_counts.facet_fields.TrxType,
-            AppType : obj.facet_counts.facet_fields.AppType
+            AppType : obj.facet_counts.facet_fields.AppType,
+            minDate : minDateString,
+            maxDate : maxDateString
         })
       });
     });

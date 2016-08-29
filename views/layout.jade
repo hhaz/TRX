@@ -12,7 +12,7 @@ html
 
   body
     header
-      h1 #{title}
+      h1 #{title} - #{totalRows} Transactions From #{minDate} To #{maxDate}
     .container
       block selectParam  
       form(method="post",action="/go/0")     
@@ -49,11 +49,12 @@ html
         br
         br
         input(type="submit", value="OK")
-    //div(id="chartTrxType")
-    //div(id="chartCurrency")
-    //div(id="chartAppType")
-    div(id="chartTrxNbr")
-    div(id="chartTrxGen")
+    div(id="chartTrxType")
+    div(id="chartCurrency")
+    div(id="chartAppType")
+    div(id="chartTrxNbr")  
+    //div(id="chartTrxGen")
+    
     script.
       function formatCurrencies() {
         var trxString = '["Currencies",';
@@ -81,6 +82,8 @@ html
         var trxString = '["Transaction Type",';
         var xString = '["x",';
         var loadString = "";
+        console.log("yo");
+        console.log(" TRX TYPE : #{TrxType}");
         var arrayTrxType = "#{TrxType}".split(",");
         for (i=0;i<arrayTrxType.length;i+=2) {
           xString += '"' + arrayTrxType[i] + '"';
@@ -180,7 +183,6 @@ html
             }
         });
       chartAppType.load(JSON.parse(formatAppType()));
-
       
       var chartTrxNbr = c3.generate({
           bindto: '#chartTrxNbr',
@@ -240,9 +242,6 @@ html
           threshold: {
           values: [0]
           }
-          },
-          size: {
-          height: 180
           }
       });
 

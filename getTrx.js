@@ -113,7 +113,7 @@ Transactions.prototype.getStatsOnly = function (montantMin, montantMax, dateMin,
 
 Transactions.prototype.getGlobalStats = function (callback) {
   
-  var query = 'q=*&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&rows=0';
+  var query = 'q=*&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&stats=true&stats.field=' +config.dateTicket + '&rows=0';
   console.log( 'Query : ' + query);
   client.get('select', query, function(err, obj){
     if(err){
@@ -261,7 +261,8 @@ Transactions.prototype.getTrxPerPeriod = function (period, dateMin, callback) {
       dateMax = startDate.add(1).month();
       break;
     case "HOUR" :
-      dateMax = new Date(startDate);
+      //dateMax = new Date(startDate);
+      dateMax = startDate.addDays(1); // test pour afficher deux dates dans le graphe
       break;
   }
 
@@ -269,13 +270,13 @@ Transactions.prototype.getTrxPerPeriod = function (period, dateMin, callback) {
 
   console.log( "currentDateString : " , currentDateString , " maxdateString : " , maxDateString);
 
-  var queryString = "q=*&facet=true&facet.range=DateServer&f.DateServer.facet.range.start=" +  currentDateString + 'T00:00:00Z' +"&f.DateServer.facet.range.end=" +  maxDateString + 'T23:59:59Z' +"&f.DateServer.facet.range.gap=%2B1" + period + "&rows=0";
-
+  var queryString = "q=*&facet=true&facet.range=DateTicket&f.DateTicket.facet.range.start=" +  currentDateString + 'T00:00:00Z' +"&f.DateTicket.facet.range.end=" +  maxDateString + 'T23:59:59Z' +"&f.DateTicket.facet.range.gap=%2B1" + period + "&rows=0";
+  console.log( queryString);
     client.get( 'select', queryString, function(err, obj){
     if(err){
       console.log(err);
     } else {
-      callback(null, obj.facet_counts.facet_ranges.DateServer.counts);
+      callback(null, obj.facet_counts.facet_ranges.DateTicket.counts);
   }
 });
 

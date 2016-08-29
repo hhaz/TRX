@@ -33,6 +33,7 @@ html
           }
         } 
         loadString = '{"columns": [' + xString + ',' + trxString + ']}';
+        console.log(loadString);
         return loadString;
       }
 
@@ -58,3 +59,11 @@ html
           }
       });
       chartTrxPerDay.load(JSON.parse(trxCurrentDay()));
+
+      setTimeout(function () {
+      chartTrxPerDay.load({
+        columns: [
+            ['data3', 130, -150, 200, 300, -200, 100]
+        ]
+      });
+      }, 1000);

@@ -6,10 +6,11 @@ var customerArray = ["LIDL", "Carrefour" , "Auchan" , "LVMH" , "Picard" , "Inter
 var currencyArray = [ "EUR" , "EUR" , "EUR", "EUR" , "GBP", "GBP"];
 var paymentAppArray = ["EMV" , "EMV" , "EMV" , "EMV" , "EMV" , "EMV" , "CLS" , "CLS" , "CLS", "AME", "AME", "SSC"];
 var trxTypeArray = [ "Debit", "Debit","Debit","Debit","Debit", "Credit", "Credit"];
-var level1Array = ["HyperMarket" , "SuperMarket" , "Market"];
+var level1Array = ["HyperMarket" , "SuperMarket" , "Market" , "ProxiMarket"];
 var level2Array = { "HyperMarket" : ["Paris" , "Lille" , "Lyon" , "Marseille" , "Toulouse" , "Nantes" , "Strasbourg" , "Nancy" , "Toulon" , "Nice" , "Cannes"], 
                     "SuperMarket" : ["Villejuif" , "Noisy Le Grand" , "Créteil" , "Versailles" , "Brest" , "Beauvais" , "Bourges" , "Brive" , "Montpellier"],
-                    "Market" : ["Vélizy" , "Fontainebleau" , "Clamart" , "Sèvres" , "Issy Les Moulineaux"]};
+                    "Market" : ["Vélizy" , "Fontainebleau" , "Clamart" , "Sèvres" , "Issy Les Moulineaux"],
+                    "ProxiMarket" : ["Viroflay" , "Melun" , "La Baule" , "Clisson" , "Orléans"]};
 var directionArray = [1, -1];
 
 var trxGenerated = 0;
