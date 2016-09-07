@@ -97,8 +97,8 @@ Transactions.prototype.getStatsOnly = function (montantMin, montantMax, dateMin,
     fq += "&fq=" + config.dateTicket +':[' + dateMin + 'T00:00:00Z%20TO%20' + dateMax +'T00:00:00Z]';
   }
 
-  var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&rows=0';
-
+  //var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.field=' + config.appType + '&stats=true&stats.field=' + config.currency + '&rows=0';
+  var query = 'q=*' + fq + '&facet=true&facet.field=' + config.currency + '&facet.field=' + config.trxType + '&facet.pivot={!stats=piv1}' + config.currency + ',' + config.trxType +'&stats=true&stats.field={!tag=piv1%20sum=true%20count=true}' + config.amount + '&rows=0';
   console.log( "Query : ",query);
   client.get('select', query, function(err, obj){
     if(err){
@@ -109,7 +109,6 @@ Transactions.prototype.getStatsOnly = function (montantMin, montantMax, dateMin,
 });
 }
 }
-
 
 Transactions.prototype.getGlobalStats = function (callback) {
   
